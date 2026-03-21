@@ -1,0 +1,144 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="page-header">
+  <div><div class="page-title">Skills & 3D Cards</div></div>
+  <button class="btn btn-primary" onclick="openSkillModal()">+ Add New Skill</button>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Preview</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Proficiency</th>
+          <th>Icon/Slug</th>
+          <th>Order</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>
+            <div class="icon-preview-circle">
+              {% if item.icon and item.icon.startswith('/static/uploads/') %}
+                <img src="{{ item.icon }}" alt="{{ item.name }}" style="width:100%; height:100%; object-fit:contain;">
+              {% else %}
+                <code style="font-size:0.7rem; color:var(--accent)">{{ item.icon }}</code>
+              {% endif %}
+            </div>
+          </td>
+          <td style="font-weight:700">{{ item.name }}</td>
+          <td><span class="badge">{{ item.category }}</span></td>
+          <td>
+            <div class="skill-meter-wrap">
+              <div class="skill-meter-fill" style="width: {{ item.proficiency }}%"></div>
+            </div>
+            <span style="font-size:0.8rem; opacity:0.8">{{ item.proficiency }}%</span>
+          </td>
+          <td><code class="slug-text">{{ item.icon or 'None' }}</code></td>
+          <td>{{ item.order_index }}</td>
+          <td class="td-actions">
+            <button class="btn btn-sm btn-ghost" onclick="editSkill({{ item|tojson }})">Edit</button>
+            <form method="POST" action="/admin/skills/delete/{{ item.id }}" onsubmit="return confirm('Truly delete this skill?')">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">New Skill Card</div>
+    <form method="POST" action="/admin/skills/save" enctype="multipart/form-data">
+      <input type="hidden" name="id" id="f-id">
+      
+      <div class="form-grid">
+        <div class="form-group col-span-2">
+          <label>Skill Name (e.g., Python, React)</label>
+          <input name="name" id="f-name" required placeholder="Python">
+        </div>
+        
+        <div class="form-group">
+          <label>Category</label>
+          <select name="category" id="f-category">
+            <option>Frontend</option>
+            <option>Backend</option>
+            <option>Database</option>
+            <option>DevOps</option>
+            <option>Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Proficiency (0-100)</label>
+          <input type="number" name="proficiency" id="f-proficiency" min="0" max="100" value="80">
+        </div>
+
+        <div class="form-group col-span-2">
+          <label>Icon Option 1: Upload Graphical Logo (Recommended)</label>
+          <input type="file" name="icon_file" id="f-icon-file" accept="image/*">
+          <small style="opacity:0.6">This will show up on the 3D Background card.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Icon Option 2: Devicon Slug</label>
+          <input name="icon" id="f-icon" placeholder="python">
+          <small style="opacity:0.5">Use if no file is uploaded (e.g., 'python', 'react').</small>
+        </div>
+
+        <div class="form-group">
+          <label>Display Order</label>
+          <input type="number" name="order_index" id="f-order" value="0">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-ghost" onclick="closeModal()">Nevermind</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.icon-preview-circle {
+  width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);
+  overflow: hidden; padding: 4px;
+}
+.badge { background: rgba(0,245,255,0.1); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; border: 1px solid rgba(0,245,255,0.2); }
+.skill-meter-wrap { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; width: 100px; overflow: hidden; margin-bottom: 4px; }
+.skill-meter-fill { background: linear-gradient(90deg, var(--accent), var(--secondary)); height: 100%; }
+.col-span-2 { grid-column: span 2; }
+.slug-text { color: var(--accent); font-size: 0.75rem; opacity: 0.8; }
+</style>
+
+<script>
+function openSkillModal() {
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('f-id').value = '';
+  document.getElementById('modal-title').textContent = 'Add New Skill';
+}
+function closeModal(){ document.getElementById('modal').classList.remove('open'); document.getElementById('f-id').value=''; }
+function editSkill(item){
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal-title').textContent = 'Modify Skill Card';
+  document.getElementById('f-id').value = item.id;
+  document.getElementById('f-name').value = item.name;
+  document.getElementById('f-category').value = item.category;
+  document.getElementById('f-proficiency').value = item.proficiency;
+  document.getElementById('f-icon').value = item.icon.startsWith('/static/uploads/') ? '' : item.icon;
+  document.getElementById('f-order').value = item.order_index;
+}
+</script>
+{% endblock %}

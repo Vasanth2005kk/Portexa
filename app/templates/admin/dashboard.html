@@ -1,0 +1,37 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="page-header">
+  <div><div class="page-title">Dashboard</div><div class="page-subtitle">Manage your portfolio content</div></div>
+  <a href="/" target="_blank" class="preview-link">↗ Preview Site</a>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-box"><div class="stat-num">{{ stats.skills }}</div><div class="stat-label">Skills</div></div>
+  <div class="stat-box"><div class="stat-num">{{ stats.projects }}</div><div class="stat-label">Projects</div></div>
+  <div class="stat-box"><div class="stat-num">{{ stats.experience }}</div><div class="stat-label">Experience</div></div>
+  <div class="stat-box"><div class="stat-num">{{ stats.certifications }}</div><div class="stat-label">Certifications</div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;">
+  {% set sections = [
+    ('👤', 'Contact Info', '/admin/contact', 'Name, email, social links'),
+    ('📝', 'Summary', '/admin/summary', 'Bio and tagline'),
+    ('⚡', 'Skills', '/admin/skills', 'Tech skills & proficiency'),
+    ('💼', 'Experience', '/admin/experience', 'Work history'),
+    ('🚀', 'Projects', '/admin/projects', 'Portfolio projects'),
+    ('🎓', 'Education', '/admin/education', 'Academic background'),
+    ('🏅', 'Certifications', '/admin/certifications', 'Professional certs'),
+    ('🏆', 'Achievements', '/admin/achievements', 'Awards & highlights'),
+    ('⚙', 'Settings', '/admin/settings', 'Theme & animations'),
+  ] %}
+  {% for icon, title, url, desc in sections %}
+  <a href="{{ url }}" style="text-decoration:none">
+    <div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(0,245,255,0.15)'">
+      <div style="font-size:1.75rem;margin-bottom:.75rem">{{ icon }}</div>
+      <div style="font-weight:600;margin-bottom:.25rem">{{ title }}</div>
+      <div style="font-size:.8rem;color:var(--text-dim)">{{ desc }}</div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

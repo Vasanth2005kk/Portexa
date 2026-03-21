@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="page-header">
+  <div><div class="page-title">Education</div></div>
+  <button class="btn btn-primary" onclick="document.getElementById('modal').classList.add('open')">+ Add Education</button>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Institution</th><th>Degree</th><th>Field</th><th>Period</th><th>GPA</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td><strong>{{ item.institution }}</strong></td>
+          <td>{{ item.degree }}</td>
+          <td style="color:var(--text-dim);font-size:.85rem">{{ item.field }}</td>
+          <td style="font-family:var(--font-mono);font-size:.8rem">{{ item.start_year }} — {{ item.end_year or 'Present' }}</td>
+          <td style="color:var(--accent);font-family:var(--font-mono);font-size:.85rem">{{ item.gpa }}</td>
+          <td class="td-actions">
+            <button class="btn btn-sm btn-ghost" onclick="editEdu({{ item|tojson }})">Edit</button>
+            <form method="POST" action="/admin/education/delete/{{ item.id }}" onsubmit="return confirm('Delete?')"><button type="submit" class="btn btn-sm btn-danger">Del</button></form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">Add Education</div>
+    <form method="POST" action="/admin/education/save">
+      <input type="hidden" name="id" id="f-id">
+      <div class="form-grid">
+        <div class="form-group full"><label>Institution Name</label><input name="institution" id="f-inst" required></div>
+        <div class="form-group"><label>Degree</label><input name="degree" id="f-degree" placeholder="Bachelor's of Science"></div>
+        <div class="form-group"><label>Field of Study</label><input name="field" id="f-field" placeholder="Computer Science"></div>
+        <div class="form-group"><label>Start Year</label><input name="start_year" id="f-start" placeholder="2018"></div>
+        <div class="form-group"><label>End Year</label><input name="end_year" id="f-end" placeholder="2022"></div>
+        <div class="form-group"><label>GPA</label><input name="gpa" id="f-gpa" placeholder="3.8/4.0"></div>
+        <div class="form-group"><label>Order</label><input type="number" name="order_index" id="f-order" value="0"></div>
+        <div class="form-group full"><label>Description / Notes</label><textarea name="description" id="f-desc" rows="3"></textarea></div>
+      </div>
+      <div class="form-actions"><button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button></div>
+    </form>
+  </div>
+</div>
+<script>
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function editEdu(item){
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal-title').textContent = 'Edit Education';
+  document.getElementById('f-id').value = item.id || '';
+  document.getElementById('f-inst').value = item.institution || '';
+  document.getElementById('f-degree').value = item.degree || '';
+  document.getElementById('f-field').value = item.field || '';
+  document.getElementById('f-start').value = item.start_year || '';
+  document.getElementById('f-end').value = item.end_year || '';
+  document.getElementById('f-gpa').value = item.gpa || '';
+  document.getElementById('f-order').value = item.order_index || 0;
+  document.getElementById('f-desc').value = item.description || '';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="page-header">
+  <div><div class="page-title">Projects</div></div>
+  <button class="btn btn-primary" onclick="document.getElementById('modal').classList.add('open')">+ Add Project</button>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Title</th><th>Tech Stack</th><th>Featured</th><th>Links</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td><strong>{{ item.title }}</strong><div style="font-size:.8rem;color:var(--text-dim);margin-top:.2rem">{{ (item.description or '')[:60] }}...</div></td>
+          <td style="font-size:.8rem;color:var(--text-dim)">{{ (item.tech_stack or '')[:50] }}</td>
+          <td>{% if item.featured %}<span style="color:var(--secondary)">★</span>{% endif %}</td>
+          <td>{% if item.github_url %}<a href="{{ item.github_url }}" target="_blank" style="color:var(--accent);font-size:.8rem">GH</a>{% endif %} {% if item.live_url %}<a href="{{ item.live_url }}" target="_blank" style="color:var(--secondary);font-size:.8rem">Live</a>{% endif %}</td>
+          <td class="td-actions">
+            <button class="btn btn-sm btn-ghost" onclick="editProject({{ item|tojson }})">Edit</button>
+            <form method="POST" action="/admin/projects/delete/{{ item.id }}" onsubmit="return confirm('Delete?')"><button type="submit" class="btn btn-sm btn-danger">Del</button></form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">Add Project</div>
+    <form method="POST" action="/admin/projects/save" enctype="multipart/form-data">
+      <input type="hidden" name="id" id="f-id">
+      <div class="form-group" style="margin-bottom:1rem"><label>Title</label><input name="title" id="f-title" required></div>
+      <div class="form-group" style="margin-bottom:1rem"><label>Description</label><textarea name="description" id="f-desc" rows="3"></textarea></div>
+      <div class="form-group" style="margin-bottom:1rem"><label>Tech Stack (comma separated)</label><input name="tech_stack" id="f-tech"></div>
+      <div class="form-grid">
+        <div class="form-group"><label>GitHub URL</label><input name="github_url" id="f-github"></div>
+        <div class="form-group"><label>Live URL</label><input name="live_url" id="f-live"></div>
+        <div class="form-group"><label>Order</label><input type="number" name="order_index" id="f-order" value="0"></div>
+        <div class="form-group" style="flex-direction:row;align-items:center;gap:.75rem;padding-top:1.5rem">
+          <input type="checkbox" name="featured" id="f-featured" style="width:auto">
+          <label for="f-featured" style="color:var(--text)">Featured</label>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:1rem"><label>Project Image</label><input type="file" name="image" accept="image/*"></div>
+      <div class="form-actions"><button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button></div>
+    </form>
+  </div>
+</div>
+<script>
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function editProject(item){
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal-title').textContent='Edit Project';
+  ['id','title','desc','tech','github','live','order'].forEach((f,i)=>{
+    const vals=[item.id,item.title,item.description,item.tech_stack,item.github_url,item.live_url,item.order_index];
+    const el=document.getElementById('f-'+f);
+    if(el) el.value=vals[i]||'';
+  });
+  document.getElementById('f-featured').checked=item.featured;
+}
+</script>
+{% endblock %}

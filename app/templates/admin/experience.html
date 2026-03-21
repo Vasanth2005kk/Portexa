@@ -1,0 +1,68 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="page-header">
+  <div><div class="page-title">Experience</div></div>
+  <button class="btn btn-primary" onclick="document.getElementById('modal').classList.add('open')">+ Add Experience</button>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Company</th><th>Role</th><th>Period</th><th>Current</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td><strong>{{ item.company }}</strong></td>
+          <td>{{ item.role }}</td>
+          <td style="font-family:var(--font-mono);font-size:.8rem">{{ item.start_date }} — {{ 'Present' if item.current else item.end_date }}</td>
+          <td>{% if item.current %}<span style="color:#0f0;font-size:.75rem">✓ Active</span>{% endif %}</td>
+          <td class="td-actions">
+            <button class="btn btn-sm btn-ghost" onclick="editExp({{ item|tojson }})">Edit</button>
+            <form method="POST" action="/admin/experience/delete/{{ item.id }}" onsubmit="return confirm('Delete?')"><button type="submit" class="btn btn-sm btn-danger">Del</button></form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">Add Experience</div>
+    <form method="POST" action="/admin/experience/save">
+      <input type="hidden" name="id" id="f-id">
+      <div class="form-grid">
+        <div class="form-group"><label>Company</label><input name="company" id="f-company" required></div>
+        <div class="form-group"><label>Role / Title</label><input name="role" id="f-role"></div>
+        <div class="form-group"><label>Start Date</label><input name="start_date" id="f-start" placeholder="Jan 2023"></div>
+        <div class="form-group"><label>End Date</label><input name="end_date" id="f-end" placeholder="Dec 2024"></div>
+        <div class="form-group"><label>Technologies (comma separated)</label><input name="technologies" id="f-tech"></div>
+        <div class="form-group"><label>Order</label><input type="number" name="order_index" id="f-order" value="0"></div>
+        <div class="form-group" style="flex-direction:row;align-items:center;gap:.75rem;padding-top:1.5rem">
+          <input type="checkbox" name="current" id="f-current" style="width:auto">
+          <label for="f-current" style="color:var(--text)">Current Job</label>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:1rem"><label>Description</label><textarea name="description" id="f-desc" rows="4"></textarea></div>
+      <div class="form-actions"><button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button></div>
+    </form>
+  </div>
+</div>
+<script>
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function editExp(item){
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal-title').textContent = 'Edit Experience';
+  document.getElementById('f-id').value = item.id || '';
+  document.getElementById('f-company').value = item.company || '';
+  document.getElementById('f-role').value = item.role || '';
+  document.getElementById('f-start').value = item.start_date || '';
+  document.getElementById('f-end').value = item.end_date || '';
+  document.getElementById('f-tech').value = item.technologies || '';
+  document.getElementById('f-order').value = item.order_index || 0;
+  document.getElementById('f-desc').value = item.description || '';
+  document.getElementById('f-current').checked = item.current;
+}
+</script>
+{% endblock %}

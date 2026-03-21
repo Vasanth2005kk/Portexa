@@ -1,0 +1,17 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="page-header"><div><div class="page-title">Summary / About</div></div></div>
+<div class="card">
+  <form method="POST">
+    <div class="form-group" style="margin-bottom:1rem">
+      <label>Tagline (shown under title)</label>
+      <input name="tagline" value="{{ item.tagline or '' }}" placeholder="Building the future, one commit at a time.">
+    </div>
+    <div class="form-group">
+      <label>Bio / Summary Content</label>
+      <textarea name="content" rows="8">{{ item.content or '' }}</textarea>
+    </div>
+    <div class="form-actions"><button type="submit" class="btn btn-primary">Save Changes</button></div>
+  </form>
+</div>
+{% endblock %}

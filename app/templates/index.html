@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ contact.name if contact else 'Portfolio' }} — Full Stack Developer">
+  <meta name="keywords" content="developer, portfolio, python, flask, react, javascript">
+  <title>{{ settings.get('site_title', 'Portfolio') }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/portfolio.css">
+</head>
+
+<body>
+  <!-- Canvas for Three.js -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">&lt;/&gt;</div>
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
+      </div>
+      <div class="loader-text">Initializing...</div>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav id="navbar">
+    <div class="nav-brand"><span class="accent">&lt;</span>{{ contact.name.split()[0] if contact else 'Alex' }}<span
+        class="accent">/&gt;</span></div>
+    <ul class="nav-links">
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#skills" class="nav-link">Skills</a></li>
+      <li><a href="#experience" class="nav-link">Experience</a></li>
+      <li><a href="#projects" class="nav-link">Projects</a></li>
+      <li><a href="#education" class="nav-link">Education</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+    <a href="/admin" class="nav-admin">⚙ Admin</a>
+    <button class="hamburger" id="hamburger">☰</button>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section id="hero" class="section hero-section">
+      <div class="hero-content">
+        <div class="hero-tag reveal-up">Full Stack Developer</div>
+        <h1 class="hero-name reveal-up delay-1" id="hero-name">Loading...</h1>
+        <p class="hero-title reveal-up delay-2" id="hero-title">Loading...</p>
+        <p class="hero-tagline reveal-up delay-3" id="hero-tagline"></p>
+        <div class="hero-cta reveal-up delay-4">
+          <a href="#projects" class="btn btn-primary">View My Work</a>
+          <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+        </div>
+        <div class="hero-socials reveal-up delay-5" id="hero-socials"></div>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" style="display: flex;justify-content: center;align-items: center;" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-num">01</span>
+          <h2 class="section-title">About Me</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-avatar-wrap reveal-left">
+            <div class="avatar-glow"></div>
+            <div class="avatar-frame" id="hero-avatar">
+              <div class="avatar-placeholder">AC</div>
+            </div>
+          </div>
+          <div class="about-text reveal-right">
+            <p class="about-bio" id="about-bio">Loading...</p>
+            <div class="about-stats">
+              <div class="stat-card"><span class="stat-num">5+</span><span class="stat-label">Years Exp.</span></div>
+              <div class="stat-card"><span class="stat-num" id="stat-projects">0</span><span
+                  class="stat-label">Projects</span></div>
+              <div class="stat-card"><span class="stat-num" id="stat-skills">0</span><span
+                  class="stat-label">Technologies</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-num">02</span>
+          <h2 class="section-title">Skills</h2>
+        </div>
+        <div id="skills-container" class="skills-wrapper"></div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-num">03</span>
+          <h2 class="section-title">Experience</h2>
+        </div>
+        <div class="timeline" id="experience-container"></div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-num">04</span>
+          <h2 class="section-title">Projects</h2>
+        </div>
+        <div class="projects-grid" id="projects-container"></div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section id="education" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-num">05</span>
+          <h2 class="section-title">Education</h2>
+        </div>
+        <div class="edu-grid" id="education-container"></div>
+      </div>
+    </section>
+
+    <!-- Certifications & Achievements -->
+    <section id="achievements" class="section">
+      <div class="container">
+        <div class="two-col-sections">
+          <div>
+            <div class="section-header">
+              <span class="section-num">06</span>
+              <h2 class="section-title">Certifications</h2>
+            </div>
+            <div class="cert-grid" id="cert-container"></div>
+          </div>
+          <div>
+            <div class="section-header">
+              <span class="section-num">07</span>
+              <h2 class="section-title">Achievements</h2>
+            </div>
+            <div class="ach-list" id="ach-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-num">08</span>
+          <h2 class="section-title">Get In Touch</h2>
+        </div>
+        <div class="contact-wrap">
+          <div class="contact-info" id="contact-info"></div>
+          <form class="contact-form" id="contact-form" onsubmit="handleContact(event)">
+            <input type="text" placeholder="Your Name" required class="form-input">
+            <input type="email" placeholder="Your Email" required class="form-input">
+            <textarea placeholder="Your Message" rows="5" required class="form-input"></textarea>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span id="footer-name">Alex Chen</span> · Built with Flask + Three.js
+      <span class="footer-year">© 2024</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="/static/js/bg.js"></script>
+  <script src="/static/js/portfolio.js"></script>
+</body>
+
+</html>

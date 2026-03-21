@@ -1,0 +1,24 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="page-header"><div><div class="page-title">Contact Info</div></div><a href="/" target="_blank" class="preview-link">↗ Preview</a></div>
+<div class="card">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div class="form-group"><label>Full Name</label><input name="name" value="{{ item.name or '' }}" required></div>
+      <div class="form-group"><label>Title / Role</label><input name="title" value="{{ item.title or '' }}"></div>
+      <div class="form-group"><label>Email</label><input type="email" name="email" value="{{ item.email or '' }}"></div>
+      <div class="form-group"><label>Phone</label><input name="phone" value="{{ item.phone or '' }}"></div>
+      <div class="form-group"><label>Location</label><input name="location" value="{{ item.location or '' }}"></div>
+      <div class="form-group"><label>LinkedIn URL</label><input name="linkedin" value="{{ item.linkedin or '' }}"></div>
+      <div class="form-group"><label>GitHub URL</label><input name="github" value="{{ item.github or '' }}"></div>
+      <div class="form-group"><label>Website URL</label><input name="website" value="{{ item.website or '' }}"></div>
+      <div class="form-group full">
+        <label>Avatar / Profile Photo</label>
+        {% if item.avatar_url %}<img src="{{ item.avatar_url }}" style="width:80px;height:80px;border-radius:8px;object-fit:cover;margin-bottom:.5rem;display:block">{% endif %}
+        <input type="file" name="avatar" accept="image/*">
+      </div>
+    </div>
+    <div class="form-actions"><button type="submit" class="btn btn-primary">Save Changes</button><a href="/admin/" class="btn btn-ghost">Cancel</a></div>
+  </form>
+</div>
+{% endblock %}
