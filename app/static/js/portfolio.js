@@ -29,16 +29,16 @@
     root.style.setProperty('--bg', s.bg_color);
     // Dynamically create variations for bg2 and bg3
     const adjust = (hex, amt) => {
-      let col = hex.replace('#','');
-      let r = Math.max(0, Math.min(255, parseInt(col.substring(0,2),16) + amt));
-      let g = Math.max(0, Math.min(255, parseInt(col.substring(2,4),16) + amt));
-      let b = Math.max(0, Math.min(255, parseInt(col.substring(4,6),16) + amt));
-      return `#${(r<<16 | g<<8 | b).toString(16).padStart(6,'0')}`;
+      let col = hex.replace('#', '');
+      let r = Math.max(0, Math.min(255, parseInt(col.substring(0, 2), 16) + amt));
+      let g = Math.max(0, Math.min(255, parseInt(col.substring(2, 4), 16) + amt));
+      let b = Math.max(0, Math.min(255, parseInt(col.substring(4, 6), 16) + amt));
+      return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
     };
     root.style.setProperty('--bg2', adjust(s.bg_color, 8));
     root.style.setProperty('--bg3', adjust(s.bg_color, 16));
   }
-  
+
   if (window.bgSettings) {
     window.bgSettings.enabled = s.animation_enabled !== 'false';
     window.bgSettings.speed = parseFloat(s.animation_speed || '1.0');
@@ -46,12 +46,12 @@
     window.bgSettings.floaterCount = parseInt(s.floater_count || '25');
     try {
       window.bgSettings.iconMappings = JSON.parse(s.icon_mappings || '{}');
-    } catch(e) { 
-      window.bgSettings.iconMappings = {}; 
+    } catch (e) {
+      window.bgSettings.iconMappings = {};
     }
-    
+
     if (window.refreshParticles) window.refreshParticles();
-    
+
     // Sync 3D background with real skills from DB
     if (window.updateBgLabels && data.skills) {
       window.updateBgLabels(data.skills);
@@ -62,7 +62,8 @@
   // ── Contact / Hero ──
   const contact = data.contact || {};
   const summary = data.summary || {};
-  setText('hero-name', contact.name || 'Alex Chen');
+  const heroName = contact.name || 'Alex Chen';
+  setText('hero-name', ' '); // Initial empty state for typing
   setText('hero-title', contact.title || 'Full Stack Developer');
   setText('hero-tagline', summary.tagline || '');
   setText('about-bio', summary.content || '');
@@ -107,14 +108,13 @@
   Object.entries(categories).forEach(([cat, items]) => {
     const catDiv = document.createElement('div');
     catDiv.className = 'skill-category reveal';
-    catDiv.innerHTML = `<div class="skill-cat-title">${cat}</div><div class="skills-row">${
-      items.map(skill => `
+    catDiv.innerHTML = `<div class="skill-cat-title">${cat}</div><div class="skills-row">${items.map(skill => `
         <div class="skill-pill" data-proficiency="${skill.proficiency}">
           <span>${skill.name}</span>
           <div class="skill-bar-wrap"><div class="skill-bar" style="width:0%"></div></div>
         </div>
       `).join('')
-    }</div>`;
+      }</div>`;
     skillsContainer.appendChild(catDiv);
   });
 
@@ -136,7 +136,7 @@
         <div class="timeline-company">${exp.company}</div>
         <p class="timeline-desc">${exp.description || ''}</p>
         <div class="tech-tags">${(exp.technologies || '').split(',').filter(Boolean).map(t =>
-          `<span class="tech-tag">${t.trim()}</span>`).join('')}
+      `<span class="tech-tag">${t.trim()}</span>`).join('')}
         </div>
       </div>`;
     expContainer.appendChild(item);
@@ -160,7 +160,7 @@
         </div>
         <p class="project-desc">${proj.description || ''}</p>
         <div class="tech-tags" style="margin-bottom:1rem">${(proj.tech_stack || '').split(',').filter(Boolean).map(t =>
-          `<span class="tech-tag">${t.trim()}</span>`).join('')}
+      `<span class="tech-tag">${t.trim()}</span>`).join('')}
         </div>
         <div class="project-links">
           ${proj.github_url ? `<a href="${proj.github_url}" target="_blank" class="project-link">⬡ GitHub</a>` : ''}
@@ -294,7 +294,12 @@
     loader.classList.add('hidden');
     // Trigger hero reveals
     document.querySelectorAll('#hero .reveal-up').forEach(el => {
-      setTimeout(() => el.classList.add('revealed'), 100);
+      setTimeout(() => {
+        el.classList.add('revealed');
+        if (el.id === 'hero-name') {
+          typeText('hero-name', heroName);
+        }
+      }, 100);
     });
   }, 2000);
 
@@ -315,6 +320,16 @@
   function setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
+  }
+
+  async function typeText(id, text, speed = 150) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = '';
+    for (let char of text) {
+      el.textContent += char;
+      await new Promise(r => setTimeout(r, speed));
+    }
   }
 
   function animateCount(id, target) {
