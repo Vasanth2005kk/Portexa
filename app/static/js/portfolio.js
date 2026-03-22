@@ -78,17 +78,30 @@
 
   // Hero socials
   const socials = document.getElementById('hero-socials');
+  if (socials) socials.innerHTML = '';
+  
+  const socialIcons = {
+    GitHub: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>`,
+    LinkedIn: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>`,
+    Email: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`,
+    Website: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`
+  };
+
   const socialLinks = [
-    { url: contact.github, icon: 'GH', label: 'GitHub' },
-    { url: contact.linkedin, icon: 'in', label: 'LinkedIn' },
-    { url: contact.email ? `mailto:${contact.email}` : null, icon: '✉', label: 'Email' },
-    { url: contact.website, icon: '🌐', label: 'Website' },
+    { url: contact.github, label: 'GitHub' },
+    { url: contact.linkedin, label: 'LinkedIn' },
+    { url: contact.email ? `mailto:${contact.email}` : null, label: 'Email' },
+    { url: contact.website, label: 'Website' },
   ];
-  socialLinks.forEach(({ url, icon, label }) => {
-    if (!url) return;
+
+  socialLinks.forEach(({ url, label }) => {
+    if (!url || !socialIcons[label]) return;
     const a = document.createElement('a');
-    a.className = 'social-link'; a.href = url; a.target = '_blank';
-    a.title = label; a.textContent = icon;
+    a.className = 'social-link'; 
+    a.href = url; 
+    a.target = '_blank';
+    a.title = label; 
+    a.innerHTML = socialIcons[label];
     socials.appendChild(a);
   });
 
@@ -321,6 +334,97 @@
     const el = document.getElementById(id);
     if (el) el.textContent = text;
   }
+
+  // Trigger the typer after the hero name completes
+  setTimeout(() => {
+    startLogoTyper(); // Start the Logo Typer
+  }, 1000);
+
+  // ── LOGO BRAND TYPER LOGIC ──
+  async function startLogoTyper() {
+    const textEl = document.getElementById('nav-logo-text');
+    const leftEl = document.getElementById('nav-accent-left');
+    const rightEl = document.getElementById('nav-accent-right');
+    if (!textEl) return;
+
+    // Grab the actual name from the element (Set by Flask or DB)
+    const brandName = textEl.textContent.trim() || "User";
+
+    const logoThemes = [
+
+      { name: brandName.toLowerCase(), left: "(", right: ")", color: "#f7df1e" }, // JS
+      { name: brandName.toLowerCase(), left: "def ", right: ":", color: "#3776ab" }, // Python
+      { name: brandName.toLowerCase(), left: "{ ", right: " }", color: "#264de4" }, // CSS
+      { name: brandName.toLowerCase(), left: "$ ", right: "", color: "#4caf50" }, // Bash
+      { name: brandName.toLowerCase(), left: "console.log('", right: "')", color: "#f0db4f" }, // JS log
+      { name: brandName.toLowerCase(), left: "print('", right: "')", color: "#306998" }, // Python print
+      { name: brandName.toLowerCase(), left: "func ", right: "()", color: "#00add8" }, // Go
+      { name: brandName.toLowerCase(), left: "public class ", right: " {}", color: "#b07219" }, // Java
+      { name: brandName.toLowerCase(), left: "#include <", right: ">", color: "#00599c" }, // C++
+      { name: brandName.toLowerCase(), left: "SELECT * FROM ", right: ";", color: "#f29111" }, // SQL
+      { name: brandName.toLowerCase(), left: "echo '", right: "'", color: "#8993be" }, // PHP
+      { name: brandName.toLowerCase(), left: "lambda ", right: ":", color: "#ff9900" }, // Lambda
+      { name: brandName.toLowerCase(), left: "[ ", right: " ]", color: "#ff6f61" }, // Array style
+      { name: brandName.toLowerCase(), left: "<>", right: "</>", color: "#8ed6fb" }, // JSX Fragment
+      { name: brandName.toLowerCase(), left: "::", right: "::", color: "#a8b9cc" }, // Namespace
+      { name: brandName.toLowerCase(), left: "@", right: "", color: "#ff4081" }, // Decorator style
+      { name: brandName.toLowerCase(), left: "// ", right: "", color: "#9e9e9e" }, // Comment style
+      { name: brandName.toLowerCase(), left: "/* ", right: " */", color: "#607d8b" }, // Block comment
+      { name: brandName.toLowerCase(), left: "<script>", right: "</script>", color: "#e34c26" }, // Script tag
+      { name: brandName.toLowerCase(), left: "<style>", right: "</style>", color: "#563d7c" }, // Style tag 
+      { name: brandName.toLowerCase(), left: ">>> ", right: "", color: "#ffd43b" }, // Python REPL
+      { name: brandName.toLowerCase(), left: "git commit -m '", right: "'", color: "#f1502f" } // Git
+    ];
+
+    let index = 0;
+    while (true) {
+      const theme = logoThemes[index];
+
+      // Update brackets/color
+      leftEl.textContent = theme.left;
+      rightEl.textContent = theme.right;
+      textEl.style.color = theme.color;
+      leftEl.style.color = theme.color;
+      rightEl.style.color = theme.color;
+
+      // Type name
+      textEl.textContent = '';
+      for (let char of theme.name) {
+        textEl.textContent += char;
+        await new Promise(r => setTimeout(r, 80));
+      }
+
+      await new Promise(r => setTimeout(r, 3000)); // Stay on this language
+
+      // Delete name
+      for (let i = theme.name.length; i >= 0; i--) {
+        textEl.textContent = theme.name.substring(0, i);
+        await new Promise(r => setTimeout(r, 40));
+      }
+
+      index = (index + 1) % logoThemes.length;
+      await new Promise(r => setTimeout(r, 400));
+    }
+  }
+
+  // ── THEME TOGGLE LOGIC ──
+  const themeToggle = document.getElementById('theme-toggle');
+  const currentTheme = localStorage.getItem('theme');
+
+  if (currentTheme === 'light') {
+    document.body.classList.add('light-theme');
+    themeToggle.textContent = '☀️';
+  }
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const isLight = document.body.classList.contains('light-theme');
+    themeToggle.textContent = isLight ? '☀️' : '🌙';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    
+    // Refresh background if needed
+    if (window.refreshParticles) window.refreshParticles();
+  });
 
   async function typeText(id, text, speed = 150) {
     const el = document.getElementById(id);

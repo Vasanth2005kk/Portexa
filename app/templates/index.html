@@ -31,8 +31,11 @@
 
   <!-- Nav -->
   <nav id="navbar">
-    <div class="nav-brand"><span class="accent">&lt;</span>{{ contact.name.split()[0] if contact else 'Alex' }}<span
-        class="accent">/&gt;</span></div>
+    <div class="nav-brand" id="nav-brand">
+      <span class="accent" id="nav-accent-left">&lt;</span>
+      <span id="nav-logo-text">{{ contact.name.split()[0] if contact else 'Vasanth' }}</span>
+      <span class="accent" id="nav-accent-right">/&gt;</span>
+    </div>
     <ul class="nav-links">
       <li><a href="#about" class="nav-link">About</a></li>
       <li><a href="#skills" class="nav-link">Skills</a></li>
@@ -40,6 +43,7 @@
       <li><a href="#projects" class="nav-link">Projects</a></li>
       <li><a href="#education" class="nav-link">Education</a></li>
       <li><a href="#contact" class="nav-link">Contact</a></li>
+      <li><button id="theme-toggle" title="Toggle Light/Dark Mode">🌙</button></li>
     </ul>
     <a href="/admin" class="nav-admin">⚙ Admin</a>
     <button class="hamburger" id="hamburger">☰</button>
@@ -189,6 +193,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="/static/js/bg.js"></script>
   <script src="/static/js/portfolio.js"></script>
+  <script src="/static/js/cursor.js"></script>
 </body>
 
 </html>

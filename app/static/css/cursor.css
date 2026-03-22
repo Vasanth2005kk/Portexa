@@ -1,0 +1,56 @@
+/* ── NEURAL CURSOR & DROPS ── */
+#jelly-cursor-container {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9999;
+  filter: url('#goo'); 
+}
+
+/* Individual Neuron Particles for the Cursor */
+.cursor-node {
+  position: absolute; width: 12px; height: 12px;
+  background: var(--accent); border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* Falling Liquid Drop */
+.jelly-drop {
+  position: absolute; width: 20px; height: 25px;
+  background: linear-gradient(to bottom, var(--accent), var(--secondary));
+  border-radius: 50% 50% 40% 40%;
+  box-shadow: 0 0 15px var(--accent);
+  pointer-events: none;
+  animation: fallToBottom 1.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+}
+
+@keyframes fallToBottom {
+  0%   { transform: scaleY(1.5) translateY(0); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: scaleY(0.7) translateY(100vh); opacity: 0; }
+}
+
+/* ── FOOTER LIQUID DRIP ── */
+.footer-liquid-overlay {
+  position: absolute; top: -15px; left: 0; width: 100%; height: 20px;
+  background: var(--accent);
+  filter: url('#goo'); 
+  opacity: 0.8;
+  pointer-events: none;
+  display: flex; justify-content: space-around;
+}
+
+.drip-stalactite {
+  width: 30px; height: 0;
+  background: var(--accent);
+  border-radius: 0 0 15px 15px;
+  animation: dripOoze 4s infinite ease-in-out;
+}
+
+@keyframes dripOoze {
+  0%, 100% { height: 5px; }
+  50%      { height: 35px; }
+}
+
+/* Hide cursor on mobile or if user prefers */
+@media (max-width: 768px) {
+  #jelly-cursor-container { display: none; }
+}

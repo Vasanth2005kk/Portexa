@@ -25,9 +25,9 @@
     if (rawIcon && (rawIcon.startsWith('/') || rawIcon.startsWith('http'))) {
       return rawIcon;
     }
-    
+
     let slug = name.toLowerCase().trim();
-    
+
     // Check custom Admin Mappings first
     if (window.bgSettings && window.bgSettings.iconMappings && window.bgSettings.iconMappings[slug]) {
       slug = window.bgSettings.iconMappings[slug];
@@ -40,7 +40,7 @@
         .replace('flask', 'flask').replace('aws', 'amazonwebservices')
         .split(' ')[0];
     }
-    
+
     return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-original.svg`;
   }
 
@@ -141,7 +141,7 @@
     return f;
   }
 
-  const FLOATER_COUNT = parseInt((window.bgSettings && window.bgSettings.floaterCount) || 25);
+  const FLOATER_COUNT = 40; //parseInt((window.bgSettings && window.bgSettings.floaterCount) || 25);
   for (let i = 0; i < FLOATER_COUNT; i++) {
     const f = createFloater(techData[i % techData.length]);
     scene.add(f.mesh); floaters.push(f);
@@ -166,16 +166,20 @@
   window.addEventListener('scroll', () => { scrollY = window.scrollY; });
 
   const clock = new THREE.Clock();
+  // Shared 2D logo positions for cursor.js to read
+  window.bgLogoPositions = [];
+
   function animate() {
     requestAnimationFrame(animate);
     const speed = parseFloat((window.bgSettings && window.bgSettings.speed) || 1);
     const t = clock.getElapsedTime();
 
     mouse.x += (mouse.targetX - mouse.x) * 0.05; mouse.y += (mouse.targetY - mouse.y) * 0.05;
-    camera.position.x += (mouse.x * 5 - camera.position.x) * 0.02; camera.position.y += (mouse.y * 4 - camera.position.y) * 0.02;
-    camera.position.z = 30 + (scrollY * 0.025); camera.lookAt(0, 0, 0);
+    // camera.position.x += (mouse.x * 5 - camera.position.x) * 0.02; camera.position.y += (mouse.y * 4 - camera.position.y) * 0.02;
+    // camera.position.z = 30 + (scrollY * 0.025); camera.lookAt(0, 0, 0);
 
-    const scrollScale = 1 + (scrollY * 0.0006);
+    // Logos stay at a default size (no longer grow on scroll)
+    const scrollScale = 1.0;
     floaters.forEach((f, i) => {
       if (!f.mesh.material.map) return;
       f.mesh.position.x += f.vx * speed; f.mesh.position.y += f.vy * speed; f.mesh.position.z += f.vz * speed;
@@ -186,7 +190,16 @@
       if (f.currentOpacity < f.targetOpacity) { f.currentOpacity += 0.008; f.mesh.material.opacity = f.currentOpacity; }
       const B = 45;
       if (Math.abs(f.mesh.position.x) > B) f.vx *= -1; if (Math.abs(f.mesh.position.y) > B) f.vy *= -1; if (Math.abs(f.mesh.position.z) > 30) f.vz *= -1;
+
+      // Project 3D position → 2D screen coords for cursor.js
+      const projected = f.mesh.position.clone().project(camera);
+      window.bgLogoPositions[i] = {
+        x: (projected.x * 0.5 + 0.5) * window.innerWidth,
+        y: (-projected.y * 0.5 + 0.5) * window.innerHeight,
+        visible: f.currentOpacity > 0.05,
+      };
     });
+    window.bgLogoPositions.length = floaters.length;
 
     if (particles) particles.rotation.y = t * 0.015 * speed;
     renderer.render(scene, camera);
