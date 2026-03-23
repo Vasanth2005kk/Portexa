@@ -47,7 +47,7 @@ body {
   color: var(--text);
   overflow-x: hidden;
   line-height: 1.6;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #bg-canvas {
@@ -523,7 +523,7 @@ main {
   border: 1px solid var(--border);
   padding: 1.25rem 1.75rem;
   border-radius: var(--radius);
-  transition: all var(--transition);
+  transition: background 0.5s var(--transition), border-color 0.5s var(--transition), transform 0.3s var(--transition), box-shadow 0.3s var(--transition);
 }
 
 .stat-card:hover {
@@ -552,7 +552,7 @@ main {
   gap: 3rem;
 }
 
-.skill-category {}
+/* .skill-category {} */
 
 .skill-cat-title {
   font-family: var(--font-mono);
@@ -660,7 +660,7 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.75rem;
-  transition: all var(--transition);
+  transition: background 0.5s var(--transition), border-color 0.5s var(--transition), transform 0.3s var(--transition), box-shadow 0.3s var(--transition);
 }
 
 .timeline-card:hover {
@@ -1078,7 +1078,7 @@ main {
   box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
 }
 
-.contact-form {}
+/* .contact-form {} */
 
 /* ── FOOTER ── */
 .footer {

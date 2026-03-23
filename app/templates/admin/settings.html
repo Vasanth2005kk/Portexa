@@ -35,6 +35,15 @@
           <input type="text" id="bg-hex" value="{{ settings.get('bg_color', '#050510') }}" style="width:120px" oninput="document.getElementById('bg-picker').value=this.value;previewColor('--bg',this.value)">
         </div>
       </div>
+      <div class="form-group">
+        <label>Typography (Font Family)</label>
+        <select name="font_family" onchange="previewFont(this.value)">
+          <option value="'Outfit', sans-serif" {% if settings.get('font_family', "'Outfit', sans-serif") == "'Outfit', sans-serif" %}selected{% endif %}>Outfit (Modern)</option>
+          <option value="'Inter', sans-serif" {% if settings.get('font_family') == "'Inter', sans-serif" %}selected{% endif %}>Inter (Clean)</option>
+          <option value="'Space Mono', monospace" {% if settings.get('font_family') == "'Space Mono', monospace" %}selected{% endif %}>Space Mono (Tech)</option>
+          <option value="'Syncopate', sans-serif" {% if settings.get('font_family') == "'Syncopate', sans-serif" %}selected{% endif %}>Syncopate (Wide)</option>
+        </select>
+      </div>
     </div>
     <div class="form-actions"><button type="submit" class="btn btn-primary">💾 Save Theme</button></div>
   </form>
@@ -77,6 +86,12 @@
   </form>
 </div>
 
+<!-- Live Preview -->
+<div class="card" style="position: relative; overflow: hidden; height: 300px; padding: 0;">
+  <div style="position: absolute; top: 1rem; left: 1rem; z-index: 2; padding: 0.25rem 0.5rem; background: rgba(0,0,0,0.5); border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem; border: 1px solid var(--border);">Live 3D Preview</div>
+  <canvas id="bg-canvas" style="width: 100%; height: 100%; display: block; background: var(--bg);"></canvas>
+</div>
+
 <!-- Change Password -->
 <div class="card">
   <div class="card-title">🔐 Change Password</div>
@@ -116,10 +131,43 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="/static/js/bg.js"></script>
 <script>
+window.bgSettings = {
+  enabled: {{ settings.get('animation_enabled', 'true') }},
+  speed: parseFloat("{{ settings.get('animation_speed', '1.0') }}"),
+  particleCount: parseInt("{{ settings.get('particle_count', '120') }}"),
+  floaterCount: parseInt("{{ settings.get('floater_count', '25') }}"),
+  accentColor: "{{ settings.get('accent_color', '#00f5ff') }}",
+  secondaryColor: "{{ settings.get('secondary_color', '#bf00ff') }}",
+  iconMappings: {{ settings.get('icon_mappings', '{}') | safe }}
+};
+
+// Start particles natively
+if (window.refreshParticles) window.refreshParticles();
+if (window.rebuildFloaters) window.rebuildFloaters();
+
+// Sync the colors live
 function previewColor(varName, value){
-  // live preview on admin page itself
   document.documentElement.style.setProperty(varName, value);
+  if (varName === '--accent') { window.bgSettings.accentColor = value; if(window.refreshParticles) window.refreshParticles(); }
+  if (varName === '--secondary') { window.bgSettings.secondaryColor = value; }
+  if (varName === '--bg') { document.getElementById('bg-canvas').style.background = value; }
 }
+
+function previewFont(value) {
+  document.documentElement.style.setProperty('--font', value);
+}
+
+// Intercept form submission to apply live preview data for inputs
+document.querySelectorAll('input[name="animation_speed"], input[name="particle_count"], input[name="floater_count"], select[name="animation_enabled"]').forEach(el => {
+  el.addEventListener('input', (e) => {
+    if (e.target.name === 'animation_speed') window.bgSettings.speed = parseFloat(e.target.value);
+    if (e.target.name === 'particle_count') { window.bgSettings.particleCount = parseInt(e.target.value); if(window.refreshParticles) window.refreshParticles(); }
+    if (e.target.name === 'floater_count') { window.bgSettings.floaterCount = parseInt(e.target.value); if(window.rebuildFloaters) window.rebuildFloaters(); }
+    if (e.target.name === 'animation_enabled') window.bgSettings.enabled = e.target.value === 'true';
+  });
+});
 </script>
 {% endblock %}

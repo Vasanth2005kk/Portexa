@@ -11,13 +11,15 @@
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 30;
 
-  // Initialize Global Settings
+  // Initialize Global Settings (will be updated by portfolio.js)
   window.bgSettings = {
     enabled: true,
     speed: 1.0,
-    particleCount: 150,
+    particleCount: 120,
+    floaterCount: 25,
     accentColor: '#00f5ff',
     secondaryColor: '#bf00ff',
+    iconMappings: {}
   };
 
   // Helper: Get Icon URL (Supports local uploads, custom mappings & Devicon)
@@ -32,30 +34,80 @@
     if (window.bgSettings && window.bgSettings.iconMappings && window.bgSettings.iconMappings[slug]) {
       slug = window.bgSettings.iconMappings[slug];
     } else {
-      // Default fallback logic
-      slug = slug
-        .replace('node.js', 'nodejs').replace('vue.js', 'vuejs')
-        .replace('c++', 'cplusplus').replace('c#', 'csharp')
-        .replace('mongodb', 'mongodb').replace('postgresql', 'postgresql')
-        .replace('flask', 'flask').replace('aws', 'amazonwebservices')
-        .split(' ')[0];
-    }
+      // Default fallback logic for devicon
+      const deviconMap = {
+        'node.js': 'nodejs/nodejs-original.svg',
+        'vue.js': 'vuejs/vuejs-original.svg',
+        'c++': 'cplusplus/cplusplus-original.svg',
+        'c#': 'csharp/csharp-original.svg',
+        'html5': 'html5/html5-original.svg',
+        'css3': 'css3/css3-original.svg',
+        'python': 'python/python-original.svg',
+        'javascript': 'javascript/javascript-original.svg',
+        'react': 'react/react-original.svg',
+        'typescript': 'typescript/typescript-original.svg',
+        'docker': 'docker/docker-original.svg',
+        'postgresql': 'postgresql/postgresql-original.svg',
+        'mongodb': 'mongodb/mongodb-original.svg',
+        'aws': 'amazonwebservices/amazonwebservices-original-wordmark.svg',
+        'rust': 'rust/rust-original.svg',
+        'go': 'go/go-original.svg',
+        'java': 'java/java-original.svg',
+        'ruby': 'ruby/ruby-original.svg',
+        'php': 'php/php-original.svg',
+        'swift': 'swift/swift-original.svg',
+        'kotlin': 'kotlin/kotlin-original.svg',
+        'flask': 'flask/flask-original.svg',
+        'django': 'django/django-plain.svg',
+        'next.js': 'nextjs/nextjs-original.svg',
+        'tailwindcss': 'tailwindcss/tailwindcss-original.svg',
+        'tailwind': 'tailwindcss/tailwindcss-original.svg',
+        'tailwind css': 'tailwindcss/tailwindcss-original.svg',
+        'three.js': 'threejs/threejs-original.svg',
+        'threejs': 'threejs/threejs-original.svg',
+        'git': 'git/git-original.svg',
+        'github': 'github/github-original.svg',
+        'linux': 'linux/linux-original.svg',
+        'ubuntu': 'ubuntu/ubuntu-plain.svg'
+      };
 
-    return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-original.svg`;
+      if (deviconMap[slug]) {
+        return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${deviconMap[slug]}`;
+      } else {
+        // Best effort fallback
+        slug = slug.split(' ')[0];
+        return `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}/${slug}-original.svg`;
+      }
+    }
   }
 
-  // const brandColors = {
-  //   'python': '#000000ff', 'javascript': '#f7df1e', 'react': '#61dafb',
-  //   'vue': '#42b883', 'node': '#339933', 'docker': '#2496ed',
-  //   'typescript': '#3178c6', 'html': '#e34f26', 'css': '#1572b6',
-  //   'django': '#092e20', 'flask': '#ffffff', 'postgresql': '#336791',
-  //   'mongodb': '#47a248', 'aws': '#ff9900', 'rust': '#ce422b', 'go': '#00aed8'
-  // };
-
   const techData = [
-    { name: 'Python' }, { name: 'JavaScript' }, { name: 'React' }, { name: 'Node.js' },
-    { name: 'Docker' }, { name: 'TypeScript' }, { name: 'Rust' }, { name: 'Go' },
-    { name: 'HTML5' }, { name: 'CSS3' }, { name: 'PostgreSQL' }, { name: 'MongoDB' }
+    { name: 'Python' },
+    { name: 'JavaScript' },
+    { name: 'React' },
+    { name: 'Node.js' },
+    { name: 'Docker' },
+    { name: 'TypeScript' },
+    { name: 'Rust' },
+    { name: 'Go' },
+    { name: 'HTML5' },
+    { name: 'CSS3' },
+    { name: 'PostgreSQL' },
+    { name: 'MongoDB' },
+    { name: 'Next.js' },
+    { name: 'Tailwind CSS' },
+    { name: 'Git' },
+    { name: 'GitHub' },
+    { name: 'Linux' },
+    { name: 'Ubuntu' },
+    { name: 'AWS' },
+    { name: 'Java' },
+    { name: 'Kotlin' },
+    { name: 'Swift' },
+    { name: 'Ruby' },
+    { name: 'PHP' },
+    { name: 'Flask' },
+    { name: 'Django' },
   ];
 
   const floaters = [];
@@ -65,24 +117,9 @@
     const canvas = document.createElement('canvas');
     canvas.width = 512; canvas.height = 512;
     const ctx = canvas.getContext('2d');
-    // const color = brandColors[name.toLowerCase().replace('.js', '').trim()] || '#00f5ff';
 
     const draw = (img = null) => {
       ctx.clearRect(0, 0, 512, 512);
-
-      // 1. Draw Card Base (Glassy Dark)
-      // const r = 50;
-      // ctx.beginPath();
-      // ctx.roundRect(40, 40, 432, 432, r);
-      // ctx.fillStyle = 'rgba(10, 10, 25, 0.9)'; // Darker for better contrast
-      // ctx.fill();
-
-      // 2. Neon Glow Border
-      // ctx.shadowBlur = 30;
-      // ctx.shadowColor = color;
-      // ctx.strokeStyle = color;
-      // ctx.lineWidth = 15;
-      // ctx.stroke();
 
       // 3. Logo/Initials
       if (img) {
@@ -90,19 +127,18 @@
         const size = 220;
         ctx.drawImage(img, 256 - size / 2, 256 - size / 1.6, size, size);
       } else {
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 90px "Outfit", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(name.slice(0, 2).toUpperCase(), 256, 260);
-      }
+        // 💡 OPTIMIZATION: Check for light theme for fallback text visibility
+        const isLight = document.body.classList.contains('light-theme');
+        ctx.fillStyle = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.15)';
+        ctx.beginPath();
+        ctx.roundRect(146, 96, 220, 220, 20);
+        ctx.fill();
 
-      // 4. Technology Label (VERY OBVIOUS)
-      // ctx.shadowBlur = 10;
-      // ctx.shadowColor = 'rgba(0,0,0,0.8)';
-      // ctx.fillStyle = '#ffffff';
-      // ctx.font = '700 48px "Outfit", sans-serif';
-      // ctx.textAlign = 'center';
-      // ctx.fillText(name, 256, 420);
+        ctx.fillStyle = isLight ? '#1a1b1e' : '#ffffff';
+        ctx.font = 'bold 110px "Outfit", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(name.slice(0, 2).toUpperCase(), 256, 250);
+      }
 
       const texture = new THREE.CanvasTexture(canvas);
       texture.anisotropy = 4;
@@ -141,11 +177,23 @@
     return f;
   }
 
-  const FLOATER_COUNT = 40; //parseInt((window.bgSettings && window.bgSettings.floaterCount) || 25);
-  for (let i = 0; i < FLOATER_COUNT; i++) {
-    const f = createFloater(techData[i % techData.length]);
-    scene.add(f.mesh); floaters.push(f);
+  let FLOATER_COUNT = 25;
+
+  function initFloaters() {
+    floaters.forEach(f => scene.remove(f.mesh));
+    floaters.length = 0;
+
+    FLOATER_COUNT = parseInt((window.bgSettings && window.bgSettings.floaterCount) || 25);
+    if (techData.length === 0) return;
+    console.log("FLOATER_COUNT", FLOATER_COUNT);
+    for (let i = 0; i < FLOATER_COUNT; i++) {
+      console.log("Teach Data :", techData[i % techData.length]);
+      const f = createFloater(techData[i % techData.length]);
+      scene.add(f.mesh); floaters.push(f);
+    }
   }
+
+  initFloaters();
 
   let particles;
   function initParticles() {
@@ -155,7 +203,9 @@
     const pos = new Float32Array(pc * 3);
     for (let i = 0; i < pc * 3; i++) pos[i] = (Math.random() - 0.5) * 140;
     pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.14, color: 0x00f5ff, transparent: true, opacity: 0.25 }));
+
+    const colorHex = (window.bgSettings && window.bgSettings.accentColor) ? window.bgSettings.accentColor.replace('#', '0x') : 0x00f5ff;
+    particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.14, color: parseInt(colorHex, 16), transparent: true, opacity: 0.25 }));
     scene.add(particles);
   }
   initParticles();
@@ -166,32 +216,54 @@
   window.addEventListener('scroll', () => { scrollY = window.scrollY; });
 
   const clock = new THREE.Clock();
-  // Shared 2D logo positions for cursor.js to read
   window.bgLogoPositions = [];
 
   function animate() {
     requestAnimationFrame(animate);
+
+    if (window.bgSettings && window.bgSettings.enabled === false) {
+      renderer.render(scene, camera);
+      return;
+    }
+
     const speed = parseFloat((window.bgSettings && window.bgSettings.speed) || 1);
     const t = clock.getElapsedTime();
 
     mouse.x += (mouse.targetX - mouse.x) * 0.05; mouse.y += (mouse.targetY - mouse.y) * 0.05;
-    // camera.position.x += (mouse.x * 5 - camera.position.x) * 0.02; camera.position.y += (mouse.y * 4 - camera.position.y) * 0.02;
-    // camera.position.z = 30 + (scrollY * 0.025); camera.lookAt(0, 0, 0);
 
-    // Logos stay at a default size (no longer grow on scroll)
     const scrollScale = 1.0;
     floaters.forEach((f, i) => {
       if (!f.mesh.material.map) return;
-      f.mesh.position.x += f.vx * speed; f.mesh.position.y += f.vy * speed; f.mesh.position.z += f.vz * speed;
-      f.mesh.rotation.x += f.rx * speed; f.mesh.rotation.y += f.ry * speed;
-      f.mesh.position.x += mouse.x * 0.015; f.mesh.position.y += mouse.y * 0.015;
+
+      // Movement with Mouse Drift
+      f.mesh.position.x += (f.vx * speed) + (mouse.x * 0.015);
+      f.mesh.position.y += (f.vy * speed) + (mouse.y * 0.015);
+      f.mesh.position.z += f.vz * speed;
+
+      const B = 48; // Boundary
+      // Directional Bounce
+      if (f.mesh.position.x > B && (f.vx * speed + mouse.x * 0.015) > 0) f.vx *= -1;
+      if (f.mesh.position.x < -B && (f.vx * speed + mouse.x * 0.015) < 0) f.vx *= -1;
+      if (f.mesh.position.y > B && (f.vy * speed + mouse.y * 0.015) > 0) f.vy *= -1;
+      if (f.mesh.position.y < -B && (f.vy * speed + mouse.y * 0.015) < 0) f.vy *= -1;
+      if (Math.abs(f.mesh.position.z) > 35) f.vz *= -1;
+
+      // Position Safety Clamp
+      f.mesh.position.x = Math.max(-B, Math.min(B, f.mesh.position.x));
+      f.mesh.position.y = Math.max(-B, Math.min(B, f.mesh.position.y));
+
+      // Rotation Restored
+      f.mesh.rotation.x += f.rx * speed;
+      f.mesh.rotation.y += f.ry * speed;
+
       const scale = scrollScale + Math.sin(t * 0.5 + i) * 0.12; f.mesh.scale.setScalar(scale);
 
-      if (f.currentOpacity < f.targetOpacity) { f.currentOpacity += 0.008; f.mesh.material.opacity = f.currentOpacity; }
-      const B = 45;
-      if (Math.abs(f.mesh.position.x) > B) f.vx *= -1; if (Math.abs(f.mesh.position.y) > B) f.vy *= -1; if (Math.abs(f.mesh.position.z) > 30) f.vz *= -1;
+      if (f.currentOpacity < f.targetOpacity) {
+        f.currentOpacity += 0.015;
+        f.mesh.material.opacity = f.currentOpacity;
+      }
 
-      // Project 3D position → 2D screen coords for cursor.js
+      // Project 3D position → 2D screen coords
       const projected = f.mesh.position.clone().project(camera);
       window.bgLogoPositions[i] = {
         x: (projected.x * 0.5 + 0.5) * window.innerWidth,
@@ -207,15 +279,23 @@
 
   window.updateBgLabels = (skills) => {
     if (!skills || !skills.length) return;
-    floaters.forEach((f, i) => {
-      const s = skills[i % skills.length];
-      makeCardTexture(s.name, getIconUrl(s.name, s.icon), (tex) => { if (f.mesh.material.map) f.mesh.material.map.dispose(); f.mesh.material.map = tex; f.mesh.material.needsUpdate = true; });
+    
+    // Add dynamic skills to list without clearing your 26 manually added ones
+    skills.forEach(s => {
+      const exists = techData.find(t => t.name.toLowerCase() === s.name.toLowerCase());
+      if (!exists) techData.push(s);
     });
+
+    initFloaters();
   };
 
   animate();
   window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
   window.refreshParticles = initParticles;
+  window.rebuildFloaters = initFloaters;
+  window.setBgColors = (bgCol) => {
+    if (bgCol) {
+      renderer.setClearColor(bgCol, 0);
+    }
+  };
 })();
-
-

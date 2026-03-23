@@ -23,10 +23,20 @@
   // ── Apply settings ──
   const s = data.settings || {};
   const root = document.documentElement;
-  if (s.accent_color) root.style.setProperty('--accent', s.accent_color);
-  if (s.secondary_color) root.style.setProperty('--secondary', s.secondary_color);
+  
+  if (!window.bgSettings) window.bgSettings = {};
+  
+  if (s.accent_color) {
+    root.style.setProperty('--accent', s.accent_color);
+    window.bgSettings.accentColor = s.accent_color;
+  }
+  if (s.secondary_color) {
+    root.style.setProperty('--secondary', s.secondary_color);
+    window.bgSettings.secondaryColor = s.secondary_color;
+  }
   if (s.bg_color) {
     root.style.setProperty('--bg', s.bg_color);
+    if (window.setBgColors) window.setBgColors(s.bg_color);
     // Dynamically create variations for bg2 and bg3
     const adjust = (hex, amt) => {
       let col = hex.replace('#', '');
@@ -39,24 +49,24 @@
     root.style.setProperty('--bg3', adjust(s.bg_color, 16));
   }
 
-  if (window.bgSettings) {
-    window.bgSettings.enabled = s.animation_enabled !== 'false';
-    window.bgSettings.speed = parseFloat(s.animation_speed || '1.0');
-    window.bgSettings.particleCount = parseInt(s.particle_count || '150');
-    window.bgSettings.floaterCount = parseInt(s.floater_count || '25');
-    try {
-      window.bgSettings.iconMappings = JSON.parse(s.icon_mappings || '{}');
-    } catch (e) {
-      window.bgSettings.iconMappings = {};
-    }
-
-    if (window.refreshParticles) window.refreshParticles();
-
-    // Sync 3D background with real skills from DB
-    if (window.updateBgLabels && data.skills) {
-      window.updateBgLabels(data.skills);
-    }
+  window.bgSettings.enabled = s.animation_enabled !== 'false';
+  window.bgSettings.speed = parseFloat(s.animation_speed || '1.0');
+  window.bgSettings.particleCount = parseInt(s.particle_count || '120');
+  window.bgSettings.floaterCount = parseInt(s.floater_count || '25');
+  try {
+    window.bgSettings.iconMappings = JSON.parse(s.icon_mappings || '{}');
+  } catch (e) {
+    window.bgSettings.iconMappings = {};
   }
+
+  if (window.refreshParticles) window.refreshParticles();
+  if (window.rebuildFloaters) window.rebuildFloaters();
+
+  // Sync 3D background with real skills from DB
+  if (window.updateBgLabels && data.skills) {
+    window.updateBgLabels(data.skills.map(s => ({ name: s.name, icon: s.icon })));
+  }
+
   if (s.site_title) document.title = s.site_title;
 
   // ── Contact / Hero ──
@@ -84,7 +94,8 @@
     GitHub: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>`,
     LinkedIn: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>`,
     Email: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`,
-    Website: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`
+    Website: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`,
+    Twitter: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>`
   };
 
   const socialLinks = [
@@ -92,6 +103,7 @@
     { url: contact.linkedin, label: 'LinkedIn' },
     { url: contact.email ? `mailto:${contact.email}` : null, label: 'Email' },
     { url: contact.website, label: 'Website' },
+    { url: contact.twitter, label: 'Twitter' },
   ];
 
   socialLinks.forEach(({ url, label }) => {
@@ -414,6 +426,7 @@
   if (currentTheme === 'light') {
     document.body.classList.add('light-theme');
     themeToggle.textContent = '☀️';
+    if (window.setBgColors) window.setBgColors('#f5f7ff');
   }
 
   themeToggle.addEventListener('click', () => {
@@ -422,7 +435,11 @@
     themeToggle.textContent = isLight ? '☀️' : '🌙';
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
     
-    // Refresh background if needed
+    // 🎨 Sync the 3D Background colors on toggle
+    if (window.setBgColors) {
+      window.setBgColors(isLight ? '#f5f7ff' : (s.bg_color || '#050510'));
+    }
+
     if (window.refreshParticles) window.refreshParticles();
   });
 
