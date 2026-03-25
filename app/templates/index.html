@@ -12,6 +12,9 @@
     href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/static/css/portfolio.css">
+  {% if settings.get('aos_enabled', 'true') == 'true' %}
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  {% endif %}
 </head>
 
 <body>
@@ -70,7 +73,7 @@
 
     <!-- About -->
     <section id="about" style="display: flex;justify-content: center;align-items: center;" class="section">
-      <div class="container">
+      <div class="container" data-aos="fade-up">
         <div class="section-header">
           <span class="section-num">01</span>
           <h2 class="section-title">About Me</h2>
@@ -98,7 +101,7 @@
 
     <!-- Skills -->
     <section id="skills" class="section">
-      <div class="container">
+      <div class="container" data-aos="fade-up">
         <div class="section-header">
           <span class="section-num">02</span>
           <h2 class="section-title">Skills</h2>
@@ -109,7 +112,7 @@
 
     <!-- Experience -->
     <section id="experience" class="section">
-      <div class="container">
+      <div class="container" data-aos="fade-up">
         <div class="section-header">
           <span class="section-num">03</span>
           <h2 class="section-title">Experience</h2>
@@ -120,7 +123,7 @@
 
     <!-- Projects -->
     <section id="projects" class="section">
-      <div class="container">
+      <div class="container" data-aos="fade-up">
         <div class="section-header">
           <span class="section-num">04</span>
           <h2 class="section-title">Projects</h2>
@@ -131,7 +134,7 @@
 
     <!-- Education -->
     <section id="education" class="section">
-      <div class="container">
+      <div class="container" data-aos="fade-up">
         <div class="section-header">
           <span class="section-num">05</span>
           <h2 class="section-title">Education</h2>
@@ -142,7 +145,7 @@
 
     <!-- Certifications & Achievements -->
     <section id="achievements" class="section">
-      <div class="container">
+      <div class="container" data-aos="fade-up">
         <div class="two-col-sections">
           <div>
             <div class="section-header">
@@ -164,7 +167,7 @@
 
     <!-- Contact -->
     <section id="contact" class="section">
-      <div class="container">
+      <div class="container" data-aos="fade-up">
         <div class="section-header">
           <span class="section-num">08</span>
           <h2 class="section-title">Get In Touch</h2>
@@ -185,7 +188,9 @@
   <footer class="footer">
     <div class="footer-inner">
       <span id="footer-name">Alex Chen</span> · Built with Flask + Three.js
-      <span class="footer-year">© <script>document.write(new Date().getFullYear())</script></span>
+      <span class="footer-year">©
+        <script>document.write(new Date().getFullYear())</script>
+      </span>
     </div>
   </footer>
 
@@ -193,6 +198,19 @@
   <script src="/static/js/bg.js"></script>
   <script src="/static/js/portfolio.js"></script>
   <script src="/static/js/cursor.js"></script>
+  {% if settings.get('aos_enabled', 'true') == 'true' %}
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      AOS.init({
+        duration: 1000,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false
+      });
+    });
+  </script>
+  {% endif %}
 </body>
 
 </html>

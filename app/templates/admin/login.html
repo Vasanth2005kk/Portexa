@@ -1,35 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600&display=swap"
+    rel="stylesheet">
   <style>
-    :root { --accent:#00f5ff; --secondary:#bf00ff; --bg:#07071a; --bg2:#0d0d24; --border:rgba(0,245,255,0.15); --text:#e0e0f0; --error:#ff4466; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;}
-    .login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:3rem 2.5rem;width:100%;max-width:400px;text-align:center;}
-    .login-logo{font-family:'Space Mono',monospace;font-size:2.5rem;color:var(--accent);margin-bottom:0.5rem;text-shadow:0 0 20px rgba(0,245,255,0.5);}
-    h1{font-size:1.4rem;font-weight:600;margin-bottom:0.5rem;}
-    .sub{color:#8888aa;font-size:0.85rem;margin-bottom:2rem;font-family:'Space Mono',monospace;}
-    .form-group{margin-bottom:1rem;text-align:left;}
-    label{display:block;font-size:0.78rem;color:#8888aa;font-family:'Space Mono',monospace;margin-bottom:0.4rem;}
-    input{width:100%;background:#12122e;border:1px solid var(--border);border-radius:8px;padding:0.85rem 1rem;color:var(--text);font-size:0.95rem;transition:border-color .2s;}
-    input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,245,255,0.08);}
-    .btn{width:100%;padding:0.9rem;background:linear-gradient(135deg,var(--accent),var(--secondary));color:#000;font-family:'Space Mono',monospace;font-size:0.9rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin-top:1rem;transition:opacity .2s;}
-    .btn:hover{opacity:0.88;}
-    .flash{padding:0.8rem;border-radius:8px;margin-bottom:1rem;background:rgba(255,68,102,0.1);border:1px solid var(--error);color:var(--error);font-size:0.85rem;}
-    .hint{color:#8888aa;font-size:0.75rem;margin-top:1.5rem;font-family:'Space Mono',monospace;}
-    a{color:var(--accent);text-decoration:none;}
+    :root {
+      --accent: #00f5ff;
+      --secondary: #bf00ff;
+      --bg: #07071a;
+      --bg2: #0d0d24;
+      --border: rgba(0, 245, 255, 0.15);
+      --text: #e0e0f0;
+      --error: #ff4466;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .sub {
+      color: #8888aa;
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: #8888aa;
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 0.4rem;
+    }
+
+    input {
+      width: 100%;
+      background: #12122e;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: border-color .2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.08);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--accent), var(--secondary));
+      color: #000;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: opacity .2s;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+    }
+
+    .flash {
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      background: rgba(255, 68, 102, 0.1);
+      border: 1px solid var(--error);
+      color: var(--error);
+      font-size: 0.85rem;
+    }
+
+    .hint {
+      color: #8888aa;
+      font-size: 0.75rem;
+      margin-top: 1.5rem;
+      font-family: 'Space Mono', monospace;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
   </style>
 </head>
+
 <body>
   <div class="login-box">
     <div class="login-logo">&lt;/&gt;</div>
     <h1>Admin Panel</h1>
     <div class="sub">Portfolio CMS</div>
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}<div class="flash">{{ message }}</div>{% endfor %}
+    {% for category, message in messages %}<div class="flash">{{ message }}</div>{% endfor %}
     {% endwith %}
     <form method="POST">
       <div class="form-group">
@@ -45,4 +160,5 @@
     <div class="hint">Default: admin / admin123 · <a href="/">← Back to site</a></div>
   </div>
 </body>
+
 </html>

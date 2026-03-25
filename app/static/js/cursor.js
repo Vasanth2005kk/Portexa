@@ -23,7 +23,7 @@
   const ctx = canvas.getContext('2d');
 
   function resize() {
-    canvas.width  = window.innerWidth;
+    canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
   resize();
@@ -31,13 +31,13 @@
 
   // ── Colour Helpers ────────────────────────────────────────────────────────
   // ── Fixed Hero Cyan Colors (No transitions) ──────────────────────────────
-  const currentCyan   = '0, 245, 255';
+  const currentCyan = '0, 245, 255';
   const currentPurple = '0, 180, 255'; // A deeper blue for mixing
 
-  function accent(a = 1)   { return `rgba(${currentCyan},${a})`; }
-  function secondary(a = 1){ return `rgba(${currentPurple},${a})`; }
-  
-  function mix(t, a = 1) { 
+  function accent(a = 1) { return `rgba(${currentCyan},${a})`; }
+  function secondary(a = 1) { return `rgba(${currentPurple},${a})`; }
+
+  function mix(t, a = 1) {
     const c1 = currentCyan.split(',').map(Number);
     const c2 = currentPurple.split(',').map(Number);
     const r = Math.round(c1[0] + (c2[0] - c1[0]) * t);
@@ -116,7 +116,7 @@
   function updateRipples() {
     for (let i = ripples.length - 1; i >= 0; i--) {
       const rp = ripples[i];
-      rp.r  += 2.5 + rp.strength * 0.1;
+      rp.r += 2.5 + rp.strength * 0.1;
       rp.alpha = Math.max(0, 1 - rp.r / rp.maxR);
       if (rp.alpha <= 0) { ripples.splice(i, 1); continue; }
 
@@ -192,7 +192,7 @@
       n.x += n.vx; n.y += n.vy;
 
       // Soft bounce off edges
-      if (n.x < 0 || n.x > canvas.width)  { n.vx *= -1; n.x = clamp(n.x, 0, canvas.width); }
+      if (n.x < 0 || n.x > canvas.width) { n.vx *= -1; n.x = clamp(n.x, 0, canvas.width); }
       if (n.y < 0 || n.y > canvas.height) { n.vy *= -1; n.y = clamp(n.y, 0, canvas.height); }
 
       // Cursor elastic attraction
@@ -236,16 +236,16 @@
           const cpy = (a.ly + b.ly) / 2 + Math.cos(waveTime + j) * 18 * morphProgress;
           ctx.moveTo(a.lx, a.ly);
           ctx.quadraticCurveTo(cpx, cpy, b.lx, b.ly);
-          ctx.lineWidth = (1.5 + morphProgress * 2) * glowBoost;
-          ctx.strokeStyle = mix(morphProgress * 0.7, alpha * glowBoost);
+          // ctx.lineWidth = (1.5 + morphProgress * 2) * glowBoost;
+          // ctx.strokeStyle = mix(morphProgress * 0.7, alpha * glowBoost);
           ctx.shadowColor = mix(morphProgress, 1);
         } else {
           // Neural mode: straight elastic lines
           ctx.moveTo(a.lx, a.ly);
           ctx.lineTo(b.lx, b.ly);
-          ctx.lineWidth = (0.8 + proximity) * glowBoost;
-          ctx.strokeStyle = accent(alpha * glowBoost);
-          ctx.shadowColor = accent(1);
+          // ctx.lineWidth = (0.8 + proximity) * glowBoost;
+          // ctx.strokeStyle = accent(alpha * glowBoost);
+          ctx.shadowColor = accent(2);
         }
 
         ctx.shadowBlur = 6 * glowBoost;
@@ -278,9 +278,9 @@
 
       // Cursor glow dot
       const grad = ctx.createRadialGradient(mx, my, 0, mx, my, 14);
-      grad.addColorStop(0,   accent(0.9));
+      grad.addColorStop(0, accent(0.9));
       grad.addColorStop(0.4, mix(0.4, 0.4));
-      grad.addColorStop(1,   accent(0));
+      grad.addColorStop(1, accent(0));
       ctx.beginPath();
       ctx.arc(mx, my, 14, 0, Math.PI * 2);
       ctx.fillStyle = grad;
@@ -327,7 +327,7 @@
     if (!logos || logos.length === 0) return;
 
     const LOGO_CONNECT_DIST = 220; // Max distance for logo↔node line
-    const LOGO_LOGO_DIST    = 260; // Max distance for logo↔logo line
+    const LOGO_LOGO_DIST = 260; // Max distance for logo↔logo line
 
     logos.forEach((logo, li) => {
       if (!logo || !logo.visible) return;

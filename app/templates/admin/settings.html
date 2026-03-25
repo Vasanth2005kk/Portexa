@@ -1,7 +1,10 @@
 {% extends 'admin/base.html' %}
 {% block content %}
 <div class="page-header">
-  <div><div class="page-title">Settings</div><div class="page-subtitle">Theme, animations & security</div></div>
+  <div>
+    <div class="page-title">Settings</div>
+    <div class="page-subtitle">Theme, animations & security</div>
+  </div>
   <a href="/" target="_blank" class="preview-link">↗ Preview Site</a>
 </div>
 
@@ -17,31 +20,45 @@
       <div class="form-group">
         <label>Accent Color (primary glow)</label>
         <div style="display:flex;gap:.75rem;align-items:center">
-          <input type="color" name="accent_color" id="accent-picker" value="{{ settings.get('accent_color', '#00f5ff') }}" style="width:60px" oninput="document.getElementById('accent-hex').value=this.value;previewColor('--accent', this.value)">
-          <input type="text" id="accent-hex" value="{{ settings.get('accent_color', '#00f5ff') }}" style="width:120px" oninput="document.getElementById('accent-picker').value=this.value;previewColor('--accent',this.value)">
+          <input type="color" name="accent_color" id="accent-picker"
+            value="{{ settings.get('accent_color', '#00f5ff') }}" style="width:60px"
+            oninput="document.getElementById('accent-hex').value=this.value;previewColor('--accent', this.value)">
+          <input type="text" id="accent-hex" value="{{ settings.get('accent_color', '#00f5ff') }}" style="width:120px"
+            oninput="document.getElementById('accent-picker').value=this.value;previewColor('--accent',this.value)">
         </div>
       </div>
       <div class="form-group">
         <label>Secondary Color (purple glow)</label>
         <div style="display:flex;gap:.75rem;align-items:center">
-          <input type="color" name="secondary_color" id="secondary-picker" value="{{ settings.get('secondary_color', '#bf00ff') }}" style="width:60px" oninput="document.getElementById('secondary-hex').value=this.value;previewColor('--secondary', this.value)">
-          <input type="text" id="secondary-hex" value="{{ settings.get('secondary_color', '#bf00ff') }}" style="width:120px" oninput="document.getElementById('secondary-picker').value=this.value;previewColor('--secondary',this.value)">
+          <input type="color" name="secondary_color" id="secondary-picker"
+            value="{{ settings.get('secondary_color', '#bf00ff') }}" style="width:60px"
+            oninput="document.getElementById('secondary-hex').value=this.value;previewColor('--secondary', this.value)">
+          <input type="text" id="secondary-hex" value="{{ settings.get('secondary_color', '#bf00ff') }}"
+            style="width:120px"
+            oninput="document.getElementById('secondary-picker').value=this.value;previewColor('--secondary',this.value)">
         </div>
       </div>
       <div class="form-group">
         <label>Background Color</label>
         <div style="display:flex;gap:.75rem;align-items:center">
-          <input type="color" name="bg_color" id="bg-picker" value="{{ settings.get('bg_color', '#050510') }}" style="width:60px" oninput="document.getElementById('bg-hex').value=this.value;previewColor('--bg', this.value)">
-          <input type="text" id="bg-hex" value="{{ settings.get('bg_color', '#050510') }}" style="width:120px" oninput="document.getElementById('bg-picker').value=this.value;previewColor('--bg',this.value)">
+          <input type="color" name="bg_color" id="bg-picker" value="{{ settings.get('bg_color', '#050510') }}"
+            style="width:60px"
+            oninput="document.getElementById('bg-hex').value=this.value;previewColor('--bg', this.value)">
+          <input type="text" id="bg-hex" value="{{ settings.get('bg_color', '#050510') }}" style="width:120px"
+            oninput="document.getElementById('bg-picker').value=this.value;previewColor('--bg',this.value)">
         </div>
       </div>
       <div class="form-group">
         <label>Typography (Font Family)</label>
         <select name="font_family" onchange="previewFont(this.value)">
-          <option value="'Outfit', sans-serif" {% if settings.get('font_family', "'Outfit', sans-serif") == "'Outfit', sans-serif" %}selected{% endif %}>Outfit (Modern)</option>
-          <option value="'Inter', sans-serif" {% if settings.get('font_family') == "'Inter', sans-serif" %}selected{% endif %}>Inter (Clean)</option>
-          <option value="'Space Mono', monospace" {% if settings.get('font_family') == "'Space Mono', monospace" %}selected{% endif %}>Space Mono (Tech)</option>
-          <option value="'Syncopate', sans-serif" {% if settings.get('font_family') == "'Syncopate', sans-serif" %}selected{% endif %}>Syncopate (Wide)</option>
+          <option value="'Outfit', sans-serif" {% if settings.get('font_family', "'Outfit', sans-serif"
+            )=="'Outfit', sans-serif" %}selected{% endif %}>Outfit (Modern)</option>
+          <option value="'Inter', sans-serif" {% if settings.get('font_family')=="'Inter', sans-serif" %}selected{%
+            endif %}>Inter (Clean)</option>
+          <option value="'Space Mono', monospace" {% if settings.get('font_family')=="'Space Mono', monospace"
+            %}selected{% endif %}>Space Mono (Tech)</option>
+          <option value="'Syncopate', sans-serif" {% if settings.get('font_family')=="'Syncopate', sans-serif"
+            %}selected{% endif %}>Syncopate (Wide)</option>
         </select>
       </div>
     </div>
@@ -55,10 +72,21 @@
   <form method="POST">
     <div class="form-grid">
       <div class="form-group">
+        <label>AOS Scroll Animations</label>
+        <select name="aos_enabled">
+          <option value="true" {% if settings.get('aos_enabled', 'true' )=='true' %}selected{% endif %}>✓ Enabled
+          </option>
+          <option value="false" {% if settings.get('aos_enabled')=='false' %}selected{% endif %}>✗ Disabled</option>
+        </select>
+        <small style="opacity:0.5">Note: Requires page refresh to apply library.</small>
+      </div>
+      <div class="form-group">
         <label>Animation Enabled</label>
         <select name="animation_enabled">
-          <option value="true" {% if settings.get('animation_enabled','true')=='true' %}selected{% endif %}>✓ Enabled</option>
-          <option value="false" {% if settings.get('animation_enabled')=='false' %}selected{% endif %}>✗ Disabled</option>
+          <option value="true" {% if settings.get('animation_enabled','true')=='true' %}selected{% endif %}>✓ Enabled
+          </option>
+          <option value="false" {% if settings.get('animation_enabled')=='false' %}selected{% endif %}>✗ Disabled
+          </option>
         </select>
       </div>
       <div class="form-group">
@@ -74,31 +102,28 @@
       </div>
       <div class="form-group">
         <label>Particle Count</label>
-        <input type="number" name="particle_count" value="{{ settings.get('particle_count','120') }}" min="10" max="400">
+        <input type="number" name="particle_count" value="{{ settings.get('particle_count','120') }}" min="10"
+          max="400">
       </div>
       <div class="form-group" style="grid-column: span 2">
         <label>Logo Icon Mappings (JSON Format)</label>
-        <textarea name="icon_mappings" rows="5" style="font-family:monospace; font-size:0.85rem; width:100%">{{ settings.get('icon_mappings', '{\n  "python": "python",\n  "node.js": "nodejs",\n  "vue.js": "vuejs",\n  "c++": "cplusplus",\n  "flask": "flask",\n  "aws": "amazonwebservices"\n}') }}</textarea>
+        <textarea name="icon_mappings" rows="5"
+          style="font-family:monospace; font-size:0.85rem; width:100%">{{ settings.get('icon_mappings', '{\n  "python": "python",\n  "node.js": "nodejs",\n  "vue.js": "vuejs",\n  "c++": "cplusplus",\n  "flask": "flask",\n  "aws": "amazonwebservices"\n}') }}</textarea>
         <small style="opacity:0.5">Maps skill names to Devicon slugs. Format: {"original": "slug"}</small>
       </div>
     </div>
     <div class="form-actions"><button type="submit" class="btn btn-primary">💾 Save 3D Engine Settings</button></div>
   </form>
 </div>
-
-<!-- Live Preview -->
-<div class="card" style="position: relative; overflow: hidden; height: 300px; padding: 0;">
-  <div style="position: absolute; top: 1rem; left: 1rem; z-index: 2; padding: 0.25rem 0.5rem; background: rgba(0,0,0,0.5); border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem; border: 1px solid var(--border);">Live 3D Preview</div>
-  <canvas id="bg-canvas" style="width: 100%; height: 100%; display: block; background: var(--bg);"></canvas>
-</div>
-
 <!-- Change Password -->
 <div class="card">
   <div class="card-title">🔐 Change Password</div>
   <form method="POST" action="/admin/change-password">
     <div class="form-grid">
-      <div class="form-group"><label>Current Password</label><input type="password" name="current_password" required></div>
-      <div class="form-group"><label>New Password</label><input type="password" name="new_password" required minlength="6"></div>
+      <div class="form-group"><label>Current Password</label><input type="password" name="current_password" required>
+      </div>
+      <div class="form-group"><label>New Password</label><input type="password" name="new_password" required
+          minlength="6"></div>
     </div>
     <div class="form-actions"><button type="submit" class="btn btn-primary">🔒 Update Password</button></div>
   </form>
@@ -109,21 +134,23 @@
   <div class="card-title">🔌 REST API Endpoints</div>
   <div style="font-family:var(--font-mono);font-size:.8rem;color:var(--text-dim);line-height:2">
     {% for method, url, desc in [
-      ('GET', '/api/portfolio', 'All portfolio data'),
-      ('GET', '/api/settings', 'Site settings'),
-      ('GET', '/api/skills', 'Skills list'),
-      ('POST', '/api/skills', 'Add skill'),
-      ('PUT', '/api/skills/:id', 'Update skill'),
-      ('DELETE', '/api/skills/:id', 'Delete skill'),
-      ('GET', '/api/projects', 'Projects list'),
-      ('POST', '/api/projects', 'Add project'),
-      ('GET', '/api/experience', 'Experience list'),
-      ('GET', '/api/education', 'Education list'),
-      ('GET', '/api/certifications', 'Certifications list'),
-      ('GET', '/api/achievements', 'Achievements list'),
+    ('GET', '/api/portfolio', 'All portfolio data'),
+    ('GET', '/api/settings', 'Site settings'),
+    ('GET', '/api/skills', 'Skills list'),
+    ('POST', '/api/skills', 'Add skill'),
+    ('PUT', '/api/skills/:id', 'Update skill'),
+    ('DELETE', '/api/skills/:id', 'Delete skill'),
+    ('GET', '/api/projects', 'Projects list'),
+    ('POST', '/api/projects', 'Add project'),
+    ('GET', '/api/experience', 'Experience list'),
+    ('GET', '/api/education', 'Education list'),
+    ('GET', '/api/certifications', 'Certifications list'),
+    ('GET', '/api/achievements', 'Achievements list'),
     ] %}
     <div style="display:flex;gap:1rem;align-items:center;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.04)">
-      <span style="color:{% if method=='GET' %}var(--accent){% elif method=='POST' %}#0f9{% elif method=='PUT' %}#fa0{% else %}var(--error){% endif %};width:50px">{{ method }}</span>
+      <span
+        style="color:{% if method=='GET' %}var(--accent){% elif method=='POST' %}#0f9{% elif method=='PUT' %}#fa0{% else %}var(--error){% endif %};width:50px">{{
+        method }}</span>
       <span style="color:var(--text);width:200px">{{ url }}</span>
       <span>{{ desc }}</span>
     </div>
@@ -134,40 +161,40 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="/static/js/bg.js"></script>
 <script>
-window.bgSettings = {
-  enabled: {{ settings.get('animation_enabled', 'true') }},
+  window.bgSettings = {
+    enabled: {{ settings.get('animation_enabled', 'true') }},
   speed: parseFloat("{{ settings.get('animation_speed', '1.0') }}"),
-  particleCount: parseInt("{{ settings.get('particle_count', '120') }}"),
-  floaterCount: parseInt("{{ settings.get('floater_count', '25') }}"),
-  accentColor: "{{ settings.get('accent_color', '#00f5ff') }}",
-  secondaryColor: "{{ settings.get('secondary_color', '#bf00ff') }}",
-  iconMappings: {{ settings.get('icon_mappings', '{}') | safe }}
+    particleCount: parseInt("{{ settings.get('particle_count', '120') }}"),
+      floaterCount: parseInt("{{ settings.get('floater_count', '25') }}"),
+        accentColor: "{{ settings.get('accent_color', '#00f5ff') }}",
+          secondaryColor: "{{ settings.get('secondary_color', '#bf00ff') }}",
+            iconMappings: { { settings.get('icon_mappings', '{}') | safe } }
 };
 
-// Start particles natively
-if (window.refreshParticles) window.refreshParticles();
-if (window.rebuildFloaters) window.rebuildFloaters();
+  // Start particles natively
+  if (window.refreshParticles) window.refreshParticles();
+  if (window.rebuildFloaters) window.rebuildFloaters();
 
-// Sync the colors live
-function previewColor(varName, value){
-  document.documentElement.style.setProperty(varName, value);
-  if (varName === '--accent') { window.bgSettings.accentColor = value; if(window.refreshParticles) window.refreshParticles(); }
-  if (varName === '--secondary') { window.bgSettings.secondaryColor = value; }
-  if (varName === '--bg') { document.getElementById('bg-canvas').style.background = value; }
-}
+  // Sync the colors live
+  function previewColor(varName, value) {
+    document.documentElement.style.setProperty(varName, value);
+    if (varName === '--accent') { window.bgSettings.accentColor = value; if (window.refreshParticles) window.refreshParticles(); }
+    if (varName === '--secondary') { window.bgSettings.secondaryColor = value; }
+    if (varName === '--bg') { document.getElementById('bg-canvas').style.background = value; }
+  }
 
-function previewFont(value) {
-  document.documentElement.style.setProperty('--font', value);
-}
+  function previewFont(value) {
+    document.documentElement.style.setProperty('--font', value);
+  }
 
-// Intercept form submission to apply live preview data for inputs
-document.querySelectorAll('input[name="animation_speed"], input[name="particle_count"], input[name="floater_count"], select[name="animation_enabled"]').forEach(el => {
-  el.addEventListener('input', (e) => {
-    if (e.target.name === 'animation_speed') window.bgSettings.speed = parseFloat(e.target.value);
-    if (e.target.name === 'particle_count') { window.bgSettings.particleCount = parseInt(e.target.value); if(window.refreshParticles) window.refreshParticles(); }
-    if (e.target.name === 'floater_count') { window.bgSettings.floaterCount = parseInt(e.target.value); if(window.rebuildFloaters) window.rebuildFloaters(); }
-    if (e.target.name === 'animation_enabled') window.bgSettings.enabled = e.target.value === 'true';
+  // Intercept form submission to apply live preview data for inputs
+  document.querySelectorAll('input[name="animation_speed"], input[name="particle_count"], input[name="floater_count"], select[name="animation_enabled"]').forEach(el => {
+    el.addEventListener('input', (e) => {
+      if (e.target.name === 'animation_speed') window.bgSettings.speed = parseFloat(e.target.value);
+      if (e.target.name === 'particle_count') { window.bgSettings.particleCount = parseInt(e.target.value); if (window.refreshParticles) window.refreshParticles(); }
+      if (e.target.name === 'floater_count') { window.bgSettings.floaterCount = parseInt(e.target.value); if (window.rebuildFloaters) window.rebuildFloaters(); }
+      if (e.target.name === 'animation_enabled') window.bgSettings.enabled = e.target.value === 'true';
+    });
   });
-});
 </script>
 {% endblock %}

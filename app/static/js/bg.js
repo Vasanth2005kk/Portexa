@@ -279,7 +279,7 @@
 
   window.updateBgLabels = (skills) => {
     if (!skills || !skills.length) return;
-    
+
     // Add dynamic skills to list without clearing your 26 manually added ones
     skills.forEach(s => {
       const exists = techData.find(t => t.name.toLowerCase() === s.name.toLowerCase());

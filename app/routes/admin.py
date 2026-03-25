@@ -360,9 +360,9 @@ def achievements_delete(item_id):
 def settings():
     db = get_db(current_app.config['DB_PATH'])
     if request.method == 'POST':
-        keys = ['accent_color','secondary_color','bg_color','animation_speed',
-                'animation_enabled','particle_count','site_title',
-                'floater_count', 'icon_mappings', 'font_family']
+        keys = ['accent_color', 'secondary_color', 'bg_color', 'animation_speed',
+                'animation_enabled', 'particle_count', 'site_title',
+                'floater_count', 'icon_mappings', 'font_family', 'aos_enabled']
         for key in keys:
             val = request.form.get(key)
             if val is not None:
