@@ -86,16 +86,16 @@ def _seed(conn, c):
         ('accent_color', '#00f5ff'), ('secondary_color', '#bf00ff'),
         ('bg_color', '#050510'), ('animation_speed', '1.0'),
         ('animation_enabled', 'true'), ('particle_count', '80'),
-        ('site_title', 'Alex Chen — Full Stack Developer'),
+        ('site_title', 'Vasanthavel — Full Stack Developer'),
     ]
     c.executemany("INSERT INTO site_settings (key, value) VALUES (?, ?)", settings)
 
     c.execute("""INSERT INTO contact_info (name,title,email,phone,location,linkedin,github,website,avatar_url)
                  VALUES (?,?,?,?,?,?,?,?,?)""",
-              ('Alex Chen', 'Full Stack Developer & AI Engineer',
-               'alex@devfolio.io', '+1 (555) 987-6543', 'San Francisco, CA',
-               'https://linkedin.com/in/alexchen', 'https://github.com/alexchen',
-               'https://alexchen.dev', ''))
+              ('Vasanthavel', 'Full Stack Developer',
+               'vasanthavel.k75@gmail.com', '+91 8220921078', 'India',
+               'https://www.linkedin.com/in/vasanth-k-b88336311/', 'https://github.com/Vasanth2005kk',
+               'https://vasanth.dev', ''))
 
     c.execute("INSERT INTO summary (content, tagline) VALUES (?, ?)", (
         "I'm a passionate full-stack developer with 5+ years of experience building scalable web applications and AI-powered solutions. I specialize in Python ecosystems (Flask, Django, FastAPI), modern JavaScript frameworks, and cloud infrastructure. I love crafting elegant solutions to complex problems and am deeply interested in the intersection of AI and web development.",

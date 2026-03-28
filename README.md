@@ -8,6 +8,8 @@ Features an interactive 3D background, scroll animations, and a complete admin d
 - **“Port”** → **Portfolio**: Represents your projects, work, and skills showcase.
 - **“exa”** → From **“extra”** / **“excellent”** / **“next-level”**: Signifies pushing the boundaries of traditional web design.
 
+###visit live demo : https://portexa-vasanth2005kk.onrender.com/
+
 ## 🚀 Quick Start
 
 ### Prerequisites

@@ -6,7 +6,17 @@ from app.db import get_db, hash_password
 import os, uuid
 
 admin_bp = Blueprint('admin', __name__, template_folder='../templates/admin')
-ALLOWED = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'}
+ALLOWED = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico'}
+
+@admin_bp.context_processor
+def inject_settings():
+    try:
+        db = get_db(current_app.config['DB_PATH'])
+        settings = {r['key']: r['value'] for r in db.execute("SELECT key,value FROM site_settings").fetchall()}
+        db.close()
+        return dict(settings=settings)
+    except:
+        return dict(settings={})
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED
@@ -371,6 +381,16 @@ def settings():
                     db.execute("UPDATE site_settings SET value=? WHERE key=?", (val, key))
                 else:
                     db.execute("INSERT INTO site_settings (key,value) VALUES (?,?)", (key, val))
+        
+        # Handle Site Favicon Upload
+        icon_upload = save_upload(request.files.get('site_favicon'))
+        if icon_upload:
+            exists = db.execute("SELECT id FROM site_settings WHERE key='site_favicon'").fetchone()
+            if exists:
+                db.execute("UPDATE site_settings SET value=? WHERE key='site_favicon'", (icon_upload,))
+            else:
+                db.execute("INSERT INTO site_settings (key,value) VALUES (?,?)", ('site_favicon', icon_upload))
+
         db.commit()
         flash('Settings saved!', 'success')
     settings = {r['key']: r['value'] for r in db.execute("SELECT key,value FROM site_settings").fetchall()}

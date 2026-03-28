@@ -11,11 +11,20 @@
 <!-- Theme Settings -->
 <div class="card">
   <div class="card-title">🎨 Theme Customization</div>
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
     <div class="form-grid">
       <div class="form-group">
         <label>Site Title</label>
         <input name="site_title" value="{{ settings.get('site_title', 'Portfolio') }}">
+      </div>
+      <div class="form-group">
+        <label>Site Icon (Favicon)</label>
+        <div style="display:flex; gap:10px; align-items:center;">
+          {% if settings.get('site_favicon') %}
+          <img src="{{ settings.get('site_favicon') }}" style="width:32px; height:32px; border-radius:4px;">
+          {% endif %}
+          <input type="file" name="site_favicon" accept="image/*">
+        </div>
       </div>
       <div class="form-group">
         <label>Accent Color (primary glow)</label>
