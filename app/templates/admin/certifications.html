@@ -16,7 +16,7 @@
           <td style="font-family:var(--font-mono);font-size:.8rem;color:var(--accent)">{{ item.date_issued }}</td>
           <td style="font-family:var(--font-mono);font-size:.8rem;color:var(--text-dim)">{{ item.expiry_date or '—' }}</td>
           <td class="td-actions">
-            <button class="btn btn-sm btn-ghost" onclick="editCert({{ item|tojson }})">Edit</button>
+            <button class="btn btn-sm btn-ghost" onclick='editCert({{ item|tojson }})'>Edit</button>
             <form method="POST" action="/admin/certifications/delete/{{ item.id }}" onsubmit="return confirm('Delete?')"><button type="submit" class="btn btn-sm btn-danger">Del</button></form>
           </td>
         </tr>

@@ -18,7 +18,7 @@
           <td style="font-family:var(--font-mono);font-size:.8rem;color:var(--secondary)">{{ item.date }}</td>
           <td style="font-size:.85rem;color:var(--accent)">{{ item.icon }}</td>
           <td class="td-actions">
-            <button class="btn btn-sm btn-ghost" onclick="editAch({{ item|tojson }})">Edit</button>
+            <button class="btn btn-sm btn-ghost" onclick='editAch({{ item|tojson }})'>Edit</button>
             <form method="POST" action="/admin/achievements/delete/{{ item.id }}" onsubmit="return confirm('Delete?')"><button type="submit" class="btn btn-sm btn-danger">Del</button></form>
           </td>
         </tr>

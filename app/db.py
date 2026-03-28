@@ -84,6 +84,7 @@ def _seed(conn, c):
 
     settings = [
         ('accent_color', '#00f5ff'), ('secondary_color', '#bf00ff'),
+        ('cursor_color', '#00f5ff'), ('cursor_secondary_color', '#bf00ff'),
         ('bg_color', '#050510'), ('animation_speed', '1.0'),
         ('animation_enabled', 'true'), ('particle_count', '80'),
         ('site_title', 'Vasanthavel — Full Stack Developer'),

@@ -42,7 +42,7 @@
           <td><code class="slug-text">{{ item.icon or 'None' }}</code></td>
           <td>{{ item.order_index }}</td>
           <td class="td-actions">
-            <button class="btn btn-sm btn-ghost" onclick="editSkill({{ item|tojson }})">Edit</button>
+            <button class="btn btn-sm btn-ghost" onclick='editSkill({{ item|tojson }})'>Edit</button>
             <form method="POST" action="/admin/skills/delete/{{ item.id }}" onsubmit="return confirm('Truly delete this skill?')">
               <button type="submit" class="btn btn-sm btn-danger">Delete</button>
             </form>

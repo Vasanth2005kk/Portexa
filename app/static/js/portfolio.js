@@ -34,6 +34,12 @@
     root.style.setProperty('--secondary', s.secondary_color);
     window.bgSettings.secondaryColor = s.secondary_color;
   }
+  if (s.cursor_color) {
+    window.bgSettings.cursorColor = s.cursor_color;
+  }
+  if (s.cursor_secondary_color) {
+    window.bgSettings.cursorSecondaryColor = s.cursor_secondary_color;
+  }
   if (s.bg_color) {
     root.style.setProperty('--bg', s.bg_color);
     if (window.setBgColors) window.setBgColors(s.bg_color);

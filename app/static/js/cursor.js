@@ -30,16 +30,35 @@
   window.addEventListener('resize', resize);
 
   // ── Colour Helpers ────────────────────────────────────────────────────────
-  // ── Fixed Hero Cyan Colors (No transitions) ──────────────────────────────
-  const currentCyan = '0, 245, 255';
-  const currentPurple = '0, 180, 255'; // A deeper blue for mixing
+  // ── Dynamic Admin Colors ──────────────────────────────
+  function hexToRgbStr(hex) {
+    if (!hex) return '0, 245, 255';
+    let c = hex.replace('#', '');
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    let r = parseInt(c.substring(0, 2), 16) || 0;
+    let g = parseInt(c.substring(2, 4), 16) || 0;
+    let b = parseInt(c.substring(4, 6), 16) || 0;
+    return `${r}, ${g}, ${b}`;
+  }
 
-  function accent(a = 1) { return `rgba(${currentCyan},${a})`; }
-  function secondary(a = 1) { return `rgba(${currentPurple},${a})`; }
+  function getCyan() {
+    return (window.bgSettings && window.bgSettings.cursorColor) 
+      ? hexToRgbStr(window.bgSettings.cursorColor) 
+      : '0, 245, 255';
+  }
+
+  function getPurple() {
+    return (window.bgSettings && window.bgSettings.cursorSecondaryColor) 
+      ? hexToRgbStr(window.bgSettings.cursorSecondaryColor) 
+      : '0, 180, 255';
+  }
+
+  function accent(a = 1) { return `rgba(${getCyan()},${a})`; }
+  function secondary(a = 1) { return `rgba(${getPurple()},${a})`; }
 
   function mix(t, a = 1) {
-    const c1 = currentCyan.split(',').map(Number);
-    const c2 = currentPurple.split(',').map(Number);
+    const c1 = getCyan().split(',').map(Number);
+    const c2 = getPurple().split(',').map(Number);
     const r = Math.round(c1[0] + (c2[0] - c1[0]) * t);
     const g = Math.round(c1[1] + (c2[1] - c1[1]) * t);
     const b = Math.round(c1[2] + (c2[2] - c1[2]) * t);
@@ -178,6 +197,18 @@
   // ── Main Draw Loop ────────────────────────────────────────────────────────
   function draw() {
     requestAnimationFrame(draw);
+
+    if (window.bgSettings && window.bgSettings.enabled === false) {
+      if (canvas.style.opacity !== '0') {
+        canvas.style.transition = 'opacity 0.6s ease';
+        canvas.style.opacity = '0';
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    } else {
+      if (canvas.style.opacity === '0') canvas.style.opacity = '1';
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     waveTime += 0.016;

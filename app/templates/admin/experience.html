@@ -16,7 +16,7 @@
           <td style="font-family:var(--font-mono);font-size:.8rem">{{ item.start_date }} — {{ 'Present' if item.current else item.end_date }}</td>
           <td>{% if item.current %}<span style="color:#0f0;font-size:.75rem">✓ Active</span>{% endif %}</td>
           <td class="td-actions">
-            <button class="btn btn-sm btn-ghost" onclick="editExp({{ item|tojson }})">Edit</button>
+            <button class="btn btn-sm btn-ghost" onclick='editExp({{ item|tojson }})'>Edit</button>
             <form method="POST" action="/admin/experience/delete/{{ item.id }}" onsubmit="return confirm('Delete?')"><button type="submit" class="btn btn-sm btn-danger">Del</button></form>
           </td>
         </tr>

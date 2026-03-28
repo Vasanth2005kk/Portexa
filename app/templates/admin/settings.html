@@ -48,6 +48,27 @@
         </div>
       </div>
       <div class="form-group">
+        <label>Neural Cursor Color (primary)</label>
+        <div style="display:flex;gap:.75rem;align-items:center">
+          <input type="color" name="cursor_color" id="cursor-picker"
+            value="{{ settings.get('cursor_color', '#00f5ff') }}" style="width:60px"
+            oninput="document.getElementById('cursor-hex').value=this.value;previewColor('--cursor-primary', this.value)">
+          <input type="text" id="cursor-hex" value="{{ settings.get('cursor_color', '#00f5ff') }}" style="width:120px"
+            oninput="document.getElementById('cursor-picker').value=this.value;previewColor('--cursor-primary',this.value)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Neural Cursor Secondary Color (purple glow)</label>
+        <div style="display:flex;gap:.75rem;align-items:center">
+          <input type="color" name="cursor_secondary_color" id="cursor-sec-picker"
+            value="{{ settings.get('cursor_secondary_color', '#bf00ff') }}" style="width:60px"
+            oninput="document.getElementById('cursor-sec-hex').value=this.value;previewColor('--cursor-secondary', this.value)">
+          <input type="text" id="cursor-sec-hex" value="{{ settings.get('cursor_secondary_color', '#bf00ff') }}"
+            style="width:120px"
+            oninput="document.getElementById('cursor-sec-picker').value=this.value;previewColor('--cursor-secondary',this.value)">
+        </div>
+      </div>
+      <div class="form-group">
         <label>Background Color</label>
         <div style="display:flex;gap:.75rem;align-items:center">
           <input type="color" name="bg_color" id="bg-picker" value="{{ settings.get('bg_color', '#050510') }}"
@@ -172,13 +193,15 @@
 <script>
   window.bgSettings = {
     enabled: {{ settings.get('animation_enabled', 'true') }},
-  speed: parseFloat("{{ settings.get('animation_speed', '1.0') }}"),
+    speed: parseFloat("{{ settings.get('animation_speed', '1.0') }}"),
     particleCount: parseInt("{{ settings.get('particle_count', '120') }}"),
-      floaterCount: parseInt("{{ settings.get('floater_count', '25') }}"),
-        accentColor: "{{ settings.get('accent_color', '#00f5ff') }}",
-          secondaryColor: "{{ settings.get('secondary_color', '#bf00ff') }}",
-            iconMappings: { { settings.get('icon_mappings', '{}') | safe } }
-};
+    floaterCount: parseInt("{{ settings.get('floater_count', '25') }}"),
+    accentColor: "{{ settings.get('accent_color', '#00f5ff') }}",
+    secondaryColor: "{{ settings.get('secondary_color', '#bf00ff') }}",
+    cursorColor: "{{ settings.get('cursor_color', '#00f5ff') }}",
+    cursorSecondaryColor: "{{ settings.get('cursor_secondary_color', '#bf00ff') }}",
+    iconMappings: {{ settings.get('icon_mappings', '{}') | safe }}
+  };
 
   // Start particles natively
   if (window.refreshParticles) window.refreshParticles();
@@ -189,6 +212,8 @@
     document.documentElement.style.setProperty(varName, value);
     if (varName === '--accent') { window.bgSettings.accentColor = value; if (window.refreshParticles) window.refreshParticles(); }
     if (varName === '--secondary') { window.bgSettings.secondaryColor = value; }
+    if (varName === '--cursor-primary') { window.bgSettings.cursorColor = value; }
+    if (varName === '--cursor-secondary') { window.bgSettings.cursorSecondaryColor = value; }
     if (varName === '--bg') { document.getElementById('bg-canvas').style.background = value; }
   }
 

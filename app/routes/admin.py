@@ -372,7 +372,8 @@ def settings():
     if request.method == 'POST':
         keys = ['accent_color', 'secondary_color', 'bg_color', 'animation_speed',
                 'animation_enabled', 'particle_count', 'site_title',
-                'floater_count', 'icon_mappings', 'font_family', 'aos_enabled']
+                'floater_count', 'icon_mappings', 'font_family', 'aos_enabled',
+                'cursor_color', 'cursor_secondary_color']
         for key in keys:
             val = request.form.get(key)
             if val is not None:

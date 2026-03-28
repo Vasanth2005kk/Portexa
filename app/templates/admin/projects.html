@@ -16,7 +16,7 @@
           <td>{% if item.featured %}<span style="color:var(--secondary)">★</span>{% endif %}</td>
           <td>{% if item.github_url %}<a href="{{ item.github_url }}" target="_blank" style="color:var(--accent);font-size:.8rem">GH</a>{% endif %} {% if item.live_url %}<a href="{{ item.live_url }}" target="_blank" style="color:var(--secondary);font-size:.8rem">Live</a>{% endif %}</td>
           <td class="td-actions">
-            <button class="btn btn-sm btn-ghost" onclick="editProject({{ item|tojson }})">Edit</button>
+            <button class="btn btn-sm btn-ghost" onclick='editProject({{ item|tojson }})'>Edit</button>
             <form method="POST" action="/admin/projects/delete/{{ item.id }}" onsubmit="return confirm('Delete?')"><button type="submit" class="btn btn-sm btn-danger">Del</button></form>
           </td>
         </tr>

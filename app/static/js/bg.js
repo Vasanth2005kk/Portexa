@@ -221,9 +221,14 @@
   function animate() {
     requestAnimationFrame(animate);
 
+    if (!canvas.style.transition) canvas.style.transition = 'opacity 0.6s ease';
+
     if (window.bgSettings && window.bgSettings.enabled === false) {
-      renderer.render(scene, camera);
+      if (canvas.style.opacity !== '0') canvas.style.opacity = '0';
+      if (window.bgLogoPositions) window.bgLogoPositions.forEach(p => p.visible = false);
       return;
+    } else {
+      if (canvas.style.opacity === '0') canvas.style.opacity = '1';
     }
 
     const speed = parseFloat((window.bgSettings && window.bgSettings.speed) || 1);
