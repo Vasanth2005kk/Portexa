@@ -63,6 +63,9 @@
         <div class="hero-cta reveal-up delay-4">
           <a href="#projects" class="btn btn-primary">View My Work</a>
           <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+          {% if settings.get('show_resume_button', 'false') == 'true' and settings.get('resume_link') %}
+          <a href="{{ settings.get('resume_link') }}" target="_blank" class="btn btn-ghost" style="border-color: var(--accent); color: var(--accent);">Resume</a>
+          {% endif %}
         </div>
         <div class="hero-socials reveal-up delay-5" id="hero-socials"></div>
       </div>
@@ -89,10 +92,10 @@
           <div class="about-text reveal-right">
             <p class="about-bio" id="about-bio">Loading...</p>
             <div class="about-stats">
-              <div class="stat-card"><span class="stat-num">5+</span><span class="stat-label">Years Exp.</span></div>
-              <div class="stat-card"><span class="stat-num" id="stat-projects">0</span><span
+              <div class="stat-card"><span class="stat-num">1</span><span class="stat-label">Years Exp.</span></div>
+              <div class="stat-card"><span class="stat-num" id="stat-projects">8+</span><span
                   class="stat-label">Projects</span></div>
-              <div class="stat-card"><span class="stat-num" id="stat-skills">0</span><span
+              <div class="stat-card"><span class="stat-num" id="stat-skills">10+</span><span
                   class="stat-label">Technologies</span></div>
             </div>
           </div>

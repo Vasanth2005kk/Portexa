@@ -91,6 +91,17 @@
             %}selected{% endif %}>Syncopate (Wide)</option>
         </select>
       </div>
+      <div class="form-group">
+        <label>Resume Link (Google Drive, etc.)</label>
+        <input type="url" name="resume_link" value="{{ settings.get('resume_link', '') }}" placeholder="https://drive.google.com/...">
+      </div>
+      <div class="form-group">
+        <label>Show Resume Button</label>
+        <select name="show_resume_button">
+          <option value="true" {% if settings.get('show_resume_button', 'false') == 'true' %}selected{% endif %}>✓ Show</option>
+          <option value="false" {% if settings.get('show_resume_button', 'false') == 'false' %}selected{% endif %}>✗ Hide</option>
+        </select>
+      </div>
     </div>
     <div class="form-actions"><button type="submit" class="btn btn-primary">💾 Save Theme</button></div>
   </form>
